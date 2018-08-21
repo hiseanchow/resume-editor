@@ -1,0 +1,125 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>简历编辑器</title>
+    <link rel="stylesheet" href="./css/reset.css">
+    <link rel="stylesheet" href="./css/style.css">
+    <link rel="stylesheet" href="./css/editarea.css">
+</head>
+<body>
+<div id="app">
+    <header id="header">
+        <div class="logo">
+            <h1>VA简历编辑器</h1>
+        </div>
+        <div class="prompt">请注意，当前处于预览状态，数据不会被保存，请登录后制作</div>
+        <div class="header-right">
+            <a href="" class="login">登录</a>
+            <a href="" class="sign-up">注册</a>
+        </div>
+    </header>
+    <aside id="aside">
+        <div class="resume-operation">
+            <ul>
+                <li><a href="" id="sava-resume">保存编辑</a></li>
+                <li><a href="">打印简历</a></li>
+                <li><a href="">分享简历</a></li>
+            </ul>
+
+        </div>
+        <div class="resume-content-editor">
+            <ul>
+                <li><a href="">模块管理</a></li>
+                <li><a href="">风格设置</a></li>
+            </ul>
+        </div>
+    </aside>
+    <main id="main">
+        <div class="resume">
+            <div>{{resume}}</div>
+            <section class="personal-info">
+                <div class="left">
+                    <editarea class="name" :value="resume.name" @edit="onEdit('name', $event)"></editarea>
+                    <p class="areer-objective">求职意向：<editarea :value="resume.objective" @edit="onEdit('objective', $event)"></editarea></p>
+                </div>
+                <div class="right">
+                    <ul>
+                        <li>城市：<editarea :value="resume.city" @edit="onEdit('city', $event)"></editarea></li>
+                        <li>学历：<editarea :value="resume.education" @edit="onEdit('education', $event)"></editarea></li>
+                        <li>年龄：<editarea :value="resume.age" @edit="onEdit('age', $event)"></editarea></li>
+                    </ul>
+                    <ul>
+                        <li>电话：<editarea :value="resume.phone" @edit="onEdit('phone', $event)"></editarea></li>
+                        <li>邮箱：<editarea :value="resume.email" @edit="onEdit('email', $event)"></editarea></li>
+                        <li>主页：<editarea :value="resume.site" @edit="onEdit('site', $event)"></editarea></li>
+                    </ul>
+                </div>
+            </section>
+            <section class="introduction">
+                <h2>个人简介</h2>
+                <div class="content">
+                    <editarea :value="resume.introduction" @edit="onEdit('introduction', $event)"></editarea>
+                </div>
+            </section>
+            <section class="work">
+                <h2>工作经历</h2>
+                <div class="content">
+                    <div class="expe-item" v-for="work in resume.workexpe" :key="work.id">
+                        <ul class="expe-title">
+                            <li><label class="editarea"><input type="text" class="setdate" v-model="work.date"></label></li>
+                            <li><span class="editarea" contenteditable="true" @input="work.company = $event.target.innerText" v-once>{{work.company}}</span></li>
+                            <li><span class="editarea" contenteditable="true" @input="work.post = $event.target.innerText" v-once>{{work.post}}</span></li>
+                        </ul>
+                        <p class="job-description editarea" contenteditable="true" @input="work.description = $event.target.innerText" v-once>{{work.description}}</p>
+                    </div>
+                </div>
+            </section>
+            <section class="edu">
+                <h2>教育经历</h2>
+                <div class="content">
+                    <div class="expe-item" v-for="edu in resume.eduexpe" :key="edu.id">
+                        <ul class="expe-title">
+                            <li><label class="editarea"><input type="text" class="setdate" v-model="edu.date"></label></li>
+                            <li><span class="editarea" contenteditable="true" @input="edu.school = $event.target.innerText" v-once>{{edu.school}}</span></li>
+                            <li><span class="editarea" contenteditable="true" @input="edu.discipline = $event.target.innerText" v-once>{{edu.discipline}}</span></li>
+                        </ul>
+                        <p class="job-description editarea" contenteditable="true" @input="edu.description = $event.target.innerText" v-once>{{edu.description}}</p>
+                    </div>
+                </div>
+            </section>
+            <section class="skill">
+                <h2>技能描述</h2>
+                <div class="content">
+                    <div class="skill-item" v-for="skill in resume.skills" :key="skill.id">
+                        <h3 class="editarea" contenteditable="true" @input="skill.name = $event.target.innerText" v-once>{{skill.name}}</h3>
+                        <p class="editarea" contenteditable="true" @input="skill.description = $event.target.innerText" v-once>{{skill.description}}</p>
+                    </div>
+                </div>
+            </section>
+            <section class="project">
+                <h2>项目经历</h2>
+                <div class="content">
+                    <div class="expe-item" v-for="project in resume.projects" :key="project.id">
+                        <ul class="expe-title">
+                            <li><label class="editarea"><input type="text" class="setdate" v-model="project.date"></label></li>
+                            <li><span class="editarea" contenteditable="true" @input="project.name = $event.target.innerText" v-once>{{project.name}}</span></li>
+                            <li><span class="editarea" contenteditable="true" @input="project.role = $event.target.innerText" v-once>{{project.role}}</span></li>
+                        </ul>
+                        <p class="job-description editarea" contenteditable="true" @input="project.description = $event.target.innerText" v-once>{{project.description}}</p>
+                    </div>
+                </div>
+            </section>
+        </div>
+    </main>
+    <div class="musk"></div>
+</div>
+<script src="../vendors/js/av-min.js"></script>
+<script src="../vendors/js/vue.min.js"></script>
+<script src="../vendors/laydate/laydate.js"></script>
+<script src="js/init-av.js"></script>
+<script src="js/editarea.js"></script>
+<script src="js/app.js"></script>
+<script src="js/init-laydata.js"></script>
+</body>
+</html>

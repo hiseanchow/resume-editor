@@ -1,0 +1,289 @@
+body{
+    background-color: #00c091;
+}
+
+.clearfix{
+    zoom: 1;
+}
+
+.clearfix::after{
+    display: block;
+    content: '';
+    clear: both;
+}
+
+p,h1,h2,h3,h4,h5,h6{
+    max-height: 999999px;
+}
+
+#header{
+    position: fixed;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    top: 0;
+    left: 0;
+    height: 60px;
+    width: 100%;
+    padding: 0 50px;
+    line-height: 60px;
+    box-shadow: 0 0 15px rgba(0,0,0,0.2);
+    background-color: #fff;
+    border-bottom: 1px solid #eee;
+    z-index: 20;
+}
+
+#header .logo{
+    color: #00c091;
+    font-size: 20px;
+    font-weight: 700;
+}
+
+#header .header-right{
+    display: flex;
+    justify-content: last-baseline;
+}
+
+#header .header-right .login{
+    margin-right: 20px;
+}
+
+#header .header-right a{
+    color: #00c091;
+    transition: .3s;
+    height: 30px;
+    line-height: 28px;
+    padding: 0 10px;
+    display: block;
+    border: 1px solid #00c091;
+    border-radius: 5px;
+}
+
+#header .header-right a:hover{
+    color: #fff;
+    background-color: #00c091;
+}
+
+#header .prompt{
+    color: #999;
+    font-size: 14px;
+}
+
+#aside{
+    width: 200px;
+    height: 100vh;
+    background-color: #fff;
+    position: fixed;
+    left: 0;
+    top: 0;
+    padding-top: 100px;
+    border-right: 1px solid #e5e5e5;
+    z-index: 19;
+}
+
+#aside .resume-operation,
+#aside .resume-content-editor{
+    display: flex;
+    flex-direction: column;
+}
+
+#aside a{
+    color: #666;
+    transition: .3s;
+}
+
+#aside a:hover{
+    color: #00c091;
+}
+
+#aside .resume-operation{
+    margin-bottom: 30px;
+}
+
+#aside .resume-content-editor{
+    padding-top: 30px;
+    border-top: 1px solid #e5e5e5;
+}
+
+#aside ul li{
+    text-align: center;
+    padding: 20px 0;
+}
+
+#aside ul li #sava-resume{
+    border: 1px solid #00c091;
+    color: #00c091;
+    padding: 5px 10px;
+    border-radius: 5px;
+    transition: 0.3s;
+}
+
+#aside ul li #sava-resume:hover{
+    background-color: #00c091;
+    color: #fff;
+}
+
+#main{
+    width: 210mm;
+    min-height: 297mm;
+    padding: 12mm;
+    box-shadow: 0 0 10px rgba(0,0,0,0.1);
+    margin: 100px auto 40px auto;
+    background-color: #fff;
+    position: relative;
+}
+
+@media screen and (max-width: 1200px) {
+    #main{
+        transform: translateX(100px);
+    }
+}
+
+#main .resume{
+    font-size: 14px;
+}
+
+#main .resume .personal-info{
+    border-bottom: 2px solid #00c091;
+    display: flex;
+    justify-content: space-between;
+    padding-bottom: 30px;
+    margin-bottom: 30px;
+}
+
+
+#main .resume .personal-info .name{
+    font-size: 30px;
+    color: #333;
+    font-weight: 600;
+}
+
+#main .resume .personal-info .areer-objective{
+    margin-top: 36px;
+    font-size: 16px;
+    color: #333333;
+}
+
+#main .resume .personal-info .areer-objective div{
+    display: inline;
+}
+
+#main .resume .personal-info .right{
+    display: flex;
+    justify-content: space-between;
+}
+
+#main .resume .personal-info .right ul:last-child{
+    margin-left: 50px;
+}
+
+#main .resume .personal-info .right ul li{
+    color: #666;
+    line-height: 30px;
+}
+
+#main .resume .personal-info .right ul li div{
+    display: inline;
+}
+
+#main .resume section.active{
+    position: relative;
+    z-index: 30;
+    background-color: #fff;
+    border: 1px #00c091 dashed;
+}
+
+.musk.active{
+    width: 100vw;
+    height: 100vh;
+    position: fixed;
+    top: 0;
+    left: 0;
+    background-color: rgba(0,0,0,0.6);
+    z-index: 25;
+}
+
+#main .resume section h2{
+    font-size: 20px;
+    color: #333;
+    margin: 30px 0 20px;
+    font-weight: 600;
+    position: relative;
+}
+
+#main .resume section h2:after{
+    content: '';
+    display: block;
+    width: 85%;
+    height: 1px;
+    position: absolute;
+    right: 0;
+    top: 50%;
+    background-color: #ccc;
+}
+
+#main .resume section .content{
+    padding: 10px 20px;
+    color: #444;
+}
+
+#main .resume section .content div{
+    line-height: 1.8;
+}
+
+#main .resume section .expe-title{
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 20px;
+    line-height: 1.8em;
+}
+
+#main .resume section .content .expe-item{
+    margin-bottom: 20px;
+    border-bottom: 1px solid #eee;
+    padding-bottom: 20px;
+}
+
+#main .resume section .content .expe-item:last-child{
+    margin-bottom: 0;
+    border-bottom: none;
+}
+
+#main .resume .skill .skill-item{
+    margin-bottom: 10px;
+}
+
+#main .resume .skill .skill-item h3{
+    color: #444;
+    font-size: 16px;
+    line-height: 1.5em;
+    padding-left: 15px;
+    position: relative;
+}
+
+#main .resume .skill .skill-item h3:before{
+    content: '';
+    display: block;
+    width: 5px;
+    height: 5px;
+    border-radius: 50%;
+    overflow: hidden;
+    position: absolute;
+    top: 50%;
+    left: 0;
+    margin-top: -2px;
+    background-color: #444;
+}
+
+#main .resume .skill .skill-item p{
+    padding: 0 15px;
+}
+
+#main .resume input[type=text]{
+    border: none;
+    outline: none;
+    font-size: 100%;
+    color: inherit;
+    height: 1.5em;
+    line-height: 1.5em;
+}
