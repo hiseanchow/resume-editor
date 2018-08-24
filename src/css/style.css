@@ -12,6 +12,10 @@ body{
     clear: both;
 }
 
+div[v-cloak]{
+    display: none;
+}
+
 p,h1,h2,h3,h4,h5,h6{
     max-height: 999999px;
 }
@@ -195,7 +199,7 @@ p,h1,h2,h3,h4,h5,h6{
 
 #main .resume section.active{
     position: relative;
-    z-z-index: 30;
+    z-index: 30;
     background-color: #fff;
     border: 1px #00c091 dashed;
 }

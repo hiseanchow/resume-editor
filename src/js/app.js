@@ -127,12 +127,35 @@ let app = new Vue({
             this.dialog.visibleMask = false;
             this.dialog.visibleDialog = false;
         },
+        /*时间格式转换*/
+        timeConversion(time){
+             let date = new Date(time);
+             return date.getFullYear() + '/' +
+                (date.getMonth()+1 < 10 ? '0'+(date.getMonth()+1) : date.getMonth()+1) + '/' +
+                date.getDate() + ' ' +
+                date.getHours() + ':' +
+                date.getMinutes() + ':' +
+                date.getSeconds();
+        },
         /*保存*/
         saveResume(e){
             e.preventDefault();
             let currentUser = AV.User.current();
             if(currentUser){
-                
+                let id = currentUser.id;
+                console.log(this.resume);
+                let user = AV.Object.createWithoutData('User', id);
+                // 修改属性
+                console.log(this.resume);
+                user.set('resume', this.resume);
+                // 保存到云端
+                user.save().then((res)=>{
+                    let updateTime = this.timeConversion(res.updatedAt);
+                    this.updatePrompt.message = '保存成功，' + updateTime;
+                },(error)=>{
+                    console.log(error);
+                    console.log('保存失败');
+                });
             }else{
                 this.showLogin();
             }
@@ -145,39 +168,41 @@ let app = new Vue({
                 passwdError = '',
                 confirmPasswdError = '';
 
-            switch (true){
-                case !this.signUpForm.email:
-                    emailError = '邮箱不能为空';
-                    break;
-                case !pattern.test(this.signUpForm.email):
-                    emailError = '邮箱格式不正确';
-                    break;
-                default:
-                    emailError = '';
+            if(!this.signUpForm.email){
+                emailError = "邮箱不能为空";
+                this.signUpForm.emailError = emailError;
+                return
+            } else if(!pattern.test(this.signUpForm.email)){
+                emailError = '邮箱格式不正确';
+                this.signUpForm.emailError = emailError;
+                return
+            } else{
+                this.signUpForm.emailError = '';
             }
 
-            this.signUpForm.emailError = emailError;
-
-            switch (true){
-                case !this.signUpForm.passwd:
-                    passwdError = '密码不能为空！';
-                    break;
-                case !this.signUpForm.passwd.match(reg):
-                    passwdError = '请输入8到14位的密码！';
-                    break;
-                default:
-                    passwdError = '';
+            if(!this.signUpForm.passwd){
+                passwdError = '密码不能为空！';
+                this.signUpForm.passwdError = passwdError;
+                return;
+            } else if(!this.signUpForm.passwd.match(reg)){
+                passwdError = '请输入8到14位的密码！';
+                this.signUpForm.passwdError = passwdError;
+                return;
+            } else{
+                this.signUpForm.passwdError = '';
             }
 
-            switch (true){
-                case !this.signUpForm.confirmPasswd:
-                    confirmPasswdError = '请再次确认密码！';
-                    break;
-                case !(this.signUpForm.passwd === this.signUpForm.confirmPasswd):
-                    confirmPasswdError = '密码不一致！';
-                    break;
-                default:
-                    confirmPasswdError = '';
+
+            if(!this.signUpForm.confirmPasswd){
+                confirmPasswdError = '请再次确认密码！';
+                this.signUpForm.confirmPasswdError = confirmPasswdError;
+                return
+            } else if(!(this.signUpForm.passwd === this.signUpForm.confirmPasswd)){
+                confirmPasswdError = '密码不一致！';
+                this.signUpForm.confirmPasswdError = confirmPasswdError;
+                return
+            }else{
+                this.signUpForm.confirmPasswdError = '';
             }
 
             // 新建 AVUser 对象实例
@@ -193,7 +218,7 @@ let app = new Vue({
                 this.signUpSuccess();
             }, (error) => {
                 switch (error.code) {
-                    case error.code === 203:
+                    case 203:
                         emailError = '此邮箱已被注册！';
                         break;
                     default:
@@ -209,26 +234,31 @@ let app = new Vue({
             let emailError = '',
                 passwdError = '';
 
-            switch (true){
-                case !this.logInForm.email:
-                    emailError = '邮箱不能为空';
-                    break;
-                case !pattern.test(this.logInForm.email):
-                    emailError = '邮箱格式不正确';
-                    break;
-                default:
-                    emailError = '';
+
+            if(!this.logInForm.email){
+                emailError = '邮箱不能为空';
+                this.logInForm.emailError = emailError;
+                return
+            } else if(!pattern.test(this.logInForm.email)){
+                emailError = '邮箱格式不正确';
+                this.logInForm.emailError = emailError;
+                return
+            } else{
+                this.logInForm.emailError = '';
             }
 
             if(!this.logInForm.passwd){
-                passwdError = '密码不能为空！';
+                passwdError = '密码不能为空';
                 this.logInForm.passwdError = passwdError;
-                return;
+                return
+            }else{
+                this.logInForm.passwdError = ''
             }
 
             AV.User.logIn(this.logInForm.email, this.logInForm.passwd).then((res) => {
                 this.currentUser = res.attributes.username;
                 this.closeDialog();
+                window.location.reload();
             }, (error) => {
                 switch (error.code){
                     case 210:
@@ -250,24 +280,38 @@ let app = new Vue({
                 this.logInForm.passwdError = passwdError;
             });
         },
+        /*登出*/
         logout(){
             AV.User.logOut();
+            window.location.reload();
+        },
+        /*查询简历*/
+        getResume(id){
+            let query = new AV.Query('User');
+            query.get(id).then((user) => {
+                if(user.attributes.resume){
+                    Object.assign(this.resume, user.attributes.resume);
+                    let updateTime = this.timeConversion(user.updatedAt);
+                    this.updatePrompt.message = '上次更新时间：' + updateTime;
+                }
+            }, (error) => {
+                console.log(error);
+            });
+        },
+        /*查询当前是否登录*/
+        hasLogin(){
             let current = AV.User.current();
-            if(!current){
+            if(current){
+                this.getResume(current.id);
+                this.currentUser = current.attributes.username;
+                this.updatePrompt.visible = true;
+            }else{
                 this.currentUser = '';
+                this.updatePrompt.visible = false
             }
         }
     },
     created(){
-        /*查询当前是否登录*/
-        let current = AV.User.current();
-        if(current){
-            console.log(current);
-            this.currentUser = current.attributes.username;
-            this.updatePrompt.visible = true;
-        }else{
-            this.currentUser = '';
-            this.updatePrompt.visible = false
-        }
+        this.hasLogin();
     }
 });

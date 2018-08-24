@@ -14,13 +14,13 @@
         <div class="logo">
             <h1>简历编辑器</h1>
         </div>
-        <div class="prompt login-reminder" v-if="!currentUser" :value="loginReminder.message"></div>
-        <div class="prompt update-prompt" v-if="updatePrompt.visible" >{{updatePrompt.message}}</div>
-        <div class="header-right" v-if="!currentUser">
+        <div class="prompt login-reminder" v-if="!currentUser" v-cloak>{{loginReminder}}</div>
+        <div class="prompt update-prompt" v-if="updatePrompt.visible" v-cloak>{{updatePrompt.message}}</div>
+        <div class="header-right" v-if="!currentUser" v-cloak>
             <a href="" class="login" @click="showLogin">登录</a>
             <a href="" class="sign-up" @click="showSignUp">注册</a>
         </div>
-        <div class="header-right currentUser" v-if="currentUser">
+        <div class="header-right currentUser" v-if="currentUser" v-cloak>
             <span class="username">{{currentUser}}</span>
             <a href="" class="logout" @click="logout">注销</a>
         </div>
@@ -118,7 +118,7 @@
             </section>
         </div>
     </main>
-    <div class="dialog-mask" v-if="dialog.visibleMask" :style="{ visibility: 'visible' }" @click="closeDialog">
+    <div class="dialog-mask" v-if="dialog.visibleMask" @click="closeDialog" v-cloak>
         <div class="dialog" v-if="dialog.visibleDialog" @click.stop="">
             <span class="close-btn" @click="closeDialog" title="关闭">&times;</span>
             <div class="login-box" v-if="dialog.visibleLogin">
@@ -126,11 +126,11 @@
                 <form action="" @submit.prevent="onLogin">
                     <ul>
                         <li>
-                            <span class="error-message" v-if="logInForm.error">{{logInForm.emailError}}</span>
-                            <input type="email" name="userID" placeholder="邮箱" v-model="logInForm.email">
+                            <span class="error-message" v-if="logInForm.emailError">{{logInForm.emailError}}</span>
+                            <input type="text" name="userID" placeholder="邮箱" v-model="logInForm.email">
                         </li>
                         <li>
-                            <span class="error-message" v-if="logInForm.error">{{logInForm.error}}</span>
+                            <span class="error-message" v-if="logInForm.passwdError">{{logInForm.passwdError}}</span>
                             <input type="password" name="userPass" placeholder="密码" v-model="logInForm.passwd">
                         </li>
 

@@ -1,6 +1,6 @@
 Vue.component('editarea',{
     props:['value'],
-    template: `<div class="editarea" contenteditable="true" @input="enter" v-once>{{value}}</div>
+    template: `<div class="editarea" contenteditable="true" @blur="enter" >{{value}}</div>
     `,
     methods:{
         enter(e){
