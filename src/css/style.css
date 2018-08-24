@@ -55,13 +55,20 @@ p,h1,h2,h3,h4,h5,h6{
     line-height: 28px;
     padding: 0 10px;
     display: block;
-    border: 1px solid #00c091;
-    border-radius: 5px;
 }
 
-#header .header-right a:hover{
+#header .header-right .sign-up{
     color: #fff;
+    border-radius: 5px;
     background-color: #00c091;
+}
+
+#header .header-right .sign-up:hover{
+    background-color: #00C06D;
+}
+
+#header .header-right .login:hover{
+    color: #00C06D;
 }
 
 #header .prompt{
@@ -188,7 +195,7 @@ p,h1,h2,h3,h4,h5,h6{
 
 #main .resume section.active{
     position: relative;
-    z-index: 30;
+    z-z-index: 30;
     background-color: #fff;
     border: 1px #00c091 dashed;
 }
@@ -286,4 +293,19 @@ p,h1,h2,h3,h4,h5,h6{
     color: inherit;
     height: 1.5em;
     line-height: 1.5em;
+}
+
+.currentUser .username{
+    color: #00c091;
+    font-weight: bold;
+}
+
+#header .currentUser .logout{
+    line-height: inherit;
+    font-size: 14px;
+    color: #999;
+}
+
+#header .currentUser .logout:hover{
+    color: #00c091;
 }

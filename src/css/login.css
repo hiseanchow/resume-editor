@@ -1,0 +1,143 @@
+.dialog-mask{
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 50;
+    background-color: rgba(0,0,0,0.5);
+    visibility: hidden;
+}
+.dialog{
+    width: 400px;
+    padding: 50px;
+    background-color: #fff;
+    z-index: 60;
+    box-shadow: 0 0 30px rgba(0,0,0,0.3);
+    overflow: hidden;
+    border-radius: 10px;
+    box-sizing: border-box;
+    position: relative;
+}
+
+.dialog .close-btn{
+    position: absolute;
+    right: 3px;
+    top: 3px;
+    color: #999;
+    display: block;
+    height: 20px;
+    width: 20px;
+    font-size: 24px;
+    text-align: center;
+    line-height: 20px;
+    cursor: pointer;
+    user-select: none;
+}
+
+.dialog .dialog-header{
+    margin-bottom: 30px;
+    font-size: 24px;
+    font-weight: bold;
+    color: #00c091;
+    text-align: center;
+}
+
+.dialog ul li{
+    margin-bottom: 30px;
+    text-align: center;
+}
+
+.dialog input{
+    width: 100%;
+    height: 40px;
+    padding: 10px;
+    color: #666;
+    border-radius: 5px;
+    border: 1px solid #ccc;
+    outline: none;
+}
+
+.dialog input:focus,
+.dialog input:hover{
+    border: 1px solid #00c091;
+}
+
+.dialog input:focus{
+    box-shadow: 0 0 3px #00c091;
+}
+
+.dialog button{
+    width: 100%;
+    height: 40px;
+    background-color: #00c091;
+    color: #fff;
+    border: none;
+    border-radius: 5px;
+    outline: none;
+    cursor: pointer;
+    font-size: 14px;
+}
+
+.dialog button:hover{
+    background-color: #00C010;
+}
+
+.dialog .links-area{
+    text-align: center;
+    display: flex;
+    font-size: 14px;
+    color: #999;
+    justify-content: center;
+}
+
+.dialog .links-area a{
+    color: #999;
+    display: block;
+    padding-right: 15px;
+    margin-right: 15px;
+    position: relative;
+}
+
+.dialog .links-area a:hover{
+    color: #00c091;
+}
+
+.dialog .links-area a::after{
+    content: '';
+    display: block;
+    position: absolute;
+    height: 14px;
+    top: 0;
+    right: 0;
+    width: 1px;
+    background-color: #999;
+}
+
+.dialog .links-area a:last-child{
+    padding-right: 0;
+    margin-right: 0;
+}
+
+.dialog .links-area a:last-child::after{
+    display: none;
+}
+
+.dialog .error-message{
+    font-size: 14px;
+    display: block;
+    text-align: left;
+    color: #00c091;
+    line-height: 2em;
+}
+
+.dialog .dialog-message{
+    color: #00c091;
+    margin-bottom: 40px;
+    font-size: 18px;
+    font-weight: bold;
+    line-height: 2em;
+}

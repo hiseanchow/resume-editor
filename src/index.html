@@ -6,23 +6,29 @@
     <link rel="stylesheet" href="./css/reset.css">
     <link rel="stylesheet" href="./css/style.css">
     <link rel="stylesheet" href="./css/editarea.css">
+    <link rel="stylesheet" href="./css/login.css">
 </head>
 <body>
 <div id="app">
     <header id="header">
         <div class="logo">
-            <h1>VA简历编辑器</h1>
+            <h1>简历编辑器</h1>
         </div>
-        <div class="prompt">请注意，当前处于预览状态，数据不会被保存，请登录后制作</div>
-        <div class="header-right">
-            <a href="" class="login">登录</a>
-            <a href="" class="sign-up">注册</a>
+        <div class="prompt login-reminder" v-if="!currentUser" :value="loginReminder.message"></div>
+        <div class="prompt update-prompt" v-if="updatePrompt.visible" >{{updatePrompt.message}}</div>
+        <div class="header-right" v-if="!currentUser">
+            <a href="" class="login" @click="showLogin">登录</a>
+            <a href="" class="sign-up" @click="showSignUp">注册</a>
+        </div>
+        <div class="header-right currentUser" v-if="currentUser">
+            <span class="username">{{currentUser}}</span>
+            <a href="" class="logout" @click="logout">注销</a>
         </div>
     </header>
     <aside id="aside">
         <div class="resume-operation">
             <ul>
-                <li><a href="" id="sava-resume">保存编辑</a></li>
+                <li><a href="" id="sava-resume" @click="saveResume">保存编辑</a></li>
                 <li><a href="">打印简历</a></li>
                 <li><a href="">分享简历</a></li>
             </ul>
@@ -112,6 +118,54 @@
             </section>
         </div>
     </main>
+    <div class="dialog-mask" v-if="dialog.visibleMask" :style="{ visibility: 'visible' }" @click="closeDialog">
+        <div class="dialog" v-if="dialog.visibleDialog" @click.stop="">
+            <span class="close-btn" @click="closeDialog" title="关闭">&times;</span>
+            <div class="login-box" v-if="dialog.visibleLogin">
+                <div class="dialog-header">登录账号</div>
+                <form action="" @submit.prevent="onLogin">
+                    <ul>
+                        <li>
+                            <span class="error-message" v-if="logInForm.error">{{logInForm.emailError}}</span>
+                            <input type="email" name="userID" placeholder="邮箱" v-model="logInForm.email">
+                        </li>
+                        <li>
+                            <span class="error-message" v-if="logInForm.error">{{logInForm.error}}</span>
+                            <input type="password" name="userPass" placeholder="密码" v-model="logInForm.passwd">
+                        </li>
+
+                        <li><button>登录</button></li>
+                    </ul>
+                </form>
+                <div class="links-area"><a href="#">忘记密码</a><a href="#" @click="showSignUp">立即注册</a></div>
+            </div>
+            <div class="sign-up-box" v-if="dialog.visibleSignUp">
+                <div class="dialog-header">注册账号</div>
+                <form action="" @submit.prevent="onSignUp">
+                    <ul>
+                        <li>
+                            <span class="error-message" v-if="signUpForm.emailError">{{signUpForm.emailError}}</span>
+                            <input type="text" name="sign-up-userID" placeholder="请输入注册邮箱" v-model="signUpForm.email">
+                        </li>
+                        <li>
+                            <span class="error-message" v-if="signUpForm.passwdError">{{signUpForm.passwdError}}</span>
+                            <input type="password" name="sign-up-userPass" placeholder="请输入密码" v-model="signUpForm.passwd">
+                        </li>
+                        <li>
+                            <span class="error-message" v-if="signUpForm.confirmPasswdError">{{signUpForm.confirmPasswdError}}</span>
+                            <input type="password" name="confirm-passwd" placeholder="请再次输入密码" v-model="signUpForm.confirmPasswd">
+                        </li>
+                        <li><button type="submit">注册</button></li>
+                    </ul>
+                </form>
+                <div class="links-area">已有账号？<a href="#" @click="showLogin">立即登录</a></div>
+            </div>
+            <div class="signUp-success" v-if="dialog.signUpSuccess">
+                <div class="dialog-message">注册成功，请检查邮箱并验证。</div>
+                <button @click="showLogin">已验证，去登录</button>
+            </div>
+        </div>
+    </div>
     <div class="musk"></div>
 </div>
 <script src="../vendors/js/av-min.js"></script>
