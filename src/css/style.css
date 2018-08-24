@@ -260,6 +260,11 @@ p,h1,h2,h3,h4,h5,h6{
     border-bottom: none;
 }
 
+#main .resume section .content .expe-item .date{
+    display: flex;
+    justify-content: left;
+}
+
 #main .resume .skill .skill-item{
     margin-bottom: 10px;
 }

@@ -71,48 +71,82 @@
             <section class="work">
                 <h2>工作经历</h2>
                 <div class="content">
-                    <div class="expe-item" v-for="work in resume.workexpe" :key="work.id">
+                    <div class="expe-item" v-for="(workexpe, key) in resume.workexpe" :key="workexpe.id">
                         <ul class="expe-title">
-                            <li><label class="editarea"><input type="text" class="setdate" v-model="work.date"></label></li>
-                            <li><span class="editarea" contenteditable="true" @input="work.company = $event.target.innerText" v-once>{{work.company}}</span></li>
-                            <li><span class="editarea" contenteditable="true" @input="work.post = $event.target.innerText" v-once>{{work.post}}</span></li>
+                            <li class="date">
+                                <editarea class="date-input" :value="workexpe.startDate" @edit="onEdit(`workexpe[${key}].startDate`, $event)"></editarea>
+                                ~
+                                <editarea class="date-input" :value="workexpe.endDate" @edit="onEdit(`workexpe[${key}].endDate`, $event)"></editarea>
+                            </li>
+                            <li>
+                                <editarea :value="workexpe.company" @edit="onEdit(`workexpe[${key}].company`, $event)"></editarea>
+                            </li>
+                            <li>
+                                <editarea :value="workexpe.post" @edit="onEdit(`workexpe[${key}].post`, $event)"></editarea>
+                            </li>
                         </ul>
-                        <p class="job-description editarea" contenteditable="true" @input="work.description = $event.target.innerText" v-once>{{work.description}}</p>
+                        <p class="description">
+                            <editarea :value="workexpe.description" @edit="onEdit(`workexpe[${key}].description`, $event)"></editarea>
+                        </p>
                     </div>
                 </div>
             </section>
             <section class="edu">
                 <h2>教育经历</h2>
                 <div class="content">
-                    <div class="expe-item" v-for="edu in resume.eduexpe" :key="edu.id">
+                    <div class="expe-item" v-for="(eduexpe, key) in resume.eduexpe" :key="eduexpe.id">
                         <ul class="expe-title">
-                            <li><label class="editarea"><input type="text" class="setdate" v-model="edu.date"></label></li>
-                            <li><span class="editarea" contenteditable="true" @input="edu.school = $event.target.innerText" v-once>{{edu.school}}</span></li>
-                            <li><span class="editarea" contenteditable="true" @input="edu.discipline = $event.target.innerText" v-once>{{edu.discipline}}</span></li>
+                            <li class="date">
+                                <editarea class="date-input" :value="eduexpe.startDate" @edit="onEdit(`eduexpe[${key}].startDate`, $event)"></editarea>
+                                ~
+                                <editarea class="date-input" :value="eduexpe.endDate" @edit="onEdit(`eduexpe[${key}].endDate`, $event)"></editarea>
+                            </li>
+                            <li>
+                                <editarea :value="eduexpe.school" @edit="onEdit(`eduexpe[${key}].school`, $event)"></editarea>
+                            </li>
+                            <li>
+                                <editarea :value="eduexpe.discipline" @edit="onEdit(`eduexpe[${key}].discipline`, $event)"></editarea>
+                            </li>
                         </ul>
-                        <p class="job-description editarea" contenteditable="true" @input="edu.description = $event.target.innerText" v-once>{{edu.description}}</p>
+                        <p class="description">
+                            <editarea :value="eduexpe.description" @edit="onEdit(`eduexpe[${key}].description`, $event)"></editarea>
+                        </p>
                     </div>
                 </div>
             </section>
             <section class="skill">
                 <h2>技能描述</h2>
                 <div class="content">
-                    <div class="skill-item" v-for="skill in resume.skills" :key="skill.id">
-                        <h3 class="editarea" contenteditable="true" @input="skill.name = $event.target.innerText" v-once>{{skill.name}}</h3>
-                        <p class="editarea" contenteditable="true" @input="skill.description = $event.target.innerText" v-once>{{skill.description}}</p>
+                    <div class="skill-item" v-for="(skills, key) in resume.skills" :key="skills.id">
+                        <h3>
+                            <editarea :value="skills.name" @edit="onEdit(`eduexpe[${key}].name`, $event)"></editarea>
+                        </h3>
+                        <p>
+                            <editarea :value="skills.description" @edit="onEdit(`skills[${key}].description`, $event)"></editarea>
+                        </p>
                     </div>
                 </div>
             </section>
             <section class="project">
                 <h2>项目经历</h2>
                 <div class="content">
-                    <div class="expe-item" v-for="project in resume.projects" :key="project.id">
+                    <div class="expe-item" v-for="(projects, key) in resume.projects" :key="projects.id">
                         <ul class="expe-title">
-                            <li><label class="editarea"><input type="text" class="setdate" v-model="project.date"></label></li>
-                            <li><span class="editarea" contenteditable="true" @input="project.name = $event.target.innerText" v-once>{{project.name}}</span></li>
-                            <li><span class="editarea" contenteditable="true" @input="project.role = $event.target.innerText" v-once>{{project.role}}</span></li>
+                            <li class="date">
+                                <editarea class="date-input" :value="projects.startDate" @edit="onEdit(`projects[${key}].startDate`, $event)"></editarea>
+                                ~
+                                <editarea class="date-input" :value="projects.endDate" @edit="onEdit(`projects[${key}].endDate`, $event)"></editarea>
+                            </li>
+                            <li>
+                                <editarea :value="projects.name" @edit="onEdit(`projects[${key}].name`, $event)"></editarea>
+                            </li>
+                            <li>
+                                <editarea :value="projects.role" @edit="onEdit(`projects[${key}].role`, $event)"></editarea>
+                            </li>
                         </ul>
-                        <p class="job-description editarea" contenteditable="true" @input="project.description = $event.target.innerText" v-once>{{project.description}}</p>
+                        <p class="description">
+                            <editarea :value="projects.description" @edit="onEdit(`projects[${key}].description`, $event)"></editarea>
+                        </p>
                     </div>
                 </div>
             </section>

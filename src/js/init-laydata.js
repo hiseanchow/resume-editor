@@ -1,11 +1,17 @@
 {
-    lay('.resume .setdate').each(function() {
+    lay('.resume .date-input').each(function() {
         laydate.render({
             elem: this,
             type: 'month',
-            range: true,
+            /*range: true,*/
             trigger: 'click',
-            theme: '#00c091'
+            theme: '#00c091',
+            btns: ['confirm'],
+            change: (value) => {
+                this.innerText = value;
+                this.focus();
+                this.blur();
+            }
         })
     });
 }
