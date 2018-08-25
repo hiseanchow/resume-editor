@@ -231,7 +231,7 @@ p,h1,h2,h3,h4,h5,h6{
 }
 
 #main .resume section.active{
-    z-index: 30;
+    z-index: 60;
 }
 
 .mask{
@@ -428,4 +428,55 @@ p,h1,h2,h3,h4,h5,h6{
 #aside .module-management .close-module-btn:hover{
     background-color: #00c091;
     color: #fff;
+}
+
+.resume section{
+    position: relative;
+}
+
+.resume section.active .section-btn-group,
+.resume section:hover .section-btn-group{
+    display: flex;
+}
+
+.resume section .section-btn-group{
+    position: absolute;
+    right: 0;
+    top: 0;
+    padding: 3px;
+    display: none;
+}
+
+.resume section .item-btn-group{
+    position: absolute;
+    left: -30px;
+    top: 0;
+    display: none;
+    flex-direction: column;
+}
+
+.resume section .item-btn-group .btn{
+    margin-left: 0;
+    background-color: #E7F2FF;
+    color: #00c091;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+}
+
+.resume section .expe-item:hover .item-btn-group{
+    display: flex;
+}
+
+.resume section .btn{
+    display: block;
+    width: 30px;
+    height: 30px;
+    margin-left: 5px;
+    margin-bottom: 5px;
+    background-color: #00c091;
+    color: #fff;
+    line-height: 30px;
+    text-align: center;
+    cursor: pointer;
+    user-select: none;
+    border-radius: 3px;
 }

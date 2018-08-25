@@ -8,7 +8,7 @@
     <link rel="stylesheet" href="./css/editarea.css">
     <link rel="stylesheet" href="./css/switch-btn.css">
     <link rel="stylesheet" href="./css/login.css">
-    <link rel="stylesheet" href="http://at.alicdn.com/t/font_808865_bns9s57sewc.css">
+    <link rel="stylesheet" href="http://at.alicdn.com/t/font_808865_fgfu22d8w0s.css">
 </head>
 <body>
 <div id="app">
@@ -74,6 +74,9 @@
                 <div class="content">
                     <editarea :value="resume.introduction" @edit="onEdit('introduction', $event)"></editarea>
                 </div>
+                <div class="section-btn-group">
+                    <span class="btn add-item-btn"><i class="iconfont icon-shanchu"></i></span>
+                </div>
             </section>
             <section class="work" :class="{ active: moduleEditing.workexpe }" v-if="module.workexpe.visible" @click="editing('workexpe')">
                 <h2>工作经历</h2>
@@ -95,7 +98,15 @@
                         <p class="description">
                             <editarea :value="workexpe.description" @edit="onEdit(`workexpe[${key}].description`, $event)"></editarea>
                         </p>
+                        <div class="item-btn-group">
+                            <span class="btn"><i class="iconfont icon-jiahao"></i></span>
+                            <span class="btn" @click="removeItem('workexpe', key, $event)"><i class="iconfont icon-shanchu"></i></span>
+                        </div>
                     </div>
+                </div>
+                <div class="section-btn-group">
+                    <span class="btn"><i class="iconfont icon-shanchu"></i></span>
+                    <span class="btn" @click="addItem('workexpe', $event)"><i class="iconfont icon-jiahao"></i></span>
                 </div>
             </section>
             <section class="edu" :class="{active: moduleEditing.eduexpe}" v-if="module.eduexpe.visible" @click="editing('eduexpe')">
@@ -118,7 +129,15 @@
                         <p class="description">
                             <editarea :value="eduexpe.description" @edit="onEdit(`eduexpe[${key}].description`, $event)"></editarea>
                         </p>
+                        <div class="item-btn-group">
+                            <span class="btn"><i class="iconfont icon-jiahao"></i></span>
+                            <span class="btn" @click="removeItem('eduexpe', key, $event)"><i class="iconfont icon-shanchu"></i></span>
+                        </div>
                     </div>
+                </div>
+                <div class="section-btn-group">
+                    <span class="btn"><i class="iconfont icon-shanchu"></i></span>
+                    <span class="btn" @click="addItem('eduexpe', $event)"><i class="iconfont icon-jiahao"></i></span>
                 </div>
             </section>
             <section class="skill" :class="{active: moduleEditing.skills}" v-if="module.skills.visible" @click="editing('skills')">
@@ -131,13 +150,21 @@
                         <p>
                             <editarea :value="skills.description" @edit="onEdit(`skills[${key}].description`, $event)"></editarea>
                         </p>
+                        <div class="item-btn-group">
+                            <span class="btn"><i class="iconfont icon-jiahao"></i></span>
+                            <span class="btn" @click="removeItem('skills', key, $event)"><i class="iconfont icon-shanchu"></i></span>
+                        </div>
                     </div>
+                </div>
+                <div class="section-btn-group">
+                    <span class="btn"><i class="iconfont icon-shanchu"></i></span>
+                    <span class="btn" @click="addItem('skills', $event)"><i class="iconfont icon-jiahao"></i></span>
                 </div>
             </section>
             <section class="project" :class="{ active: moduleEditing.projects }" v-if="module.projects.visible" @click="editing('projects')">
                 <h2>项目经历</h2>
                 <div class="content">
-                    <div class="expe-item" v-for="(projects, key) in resume.projects" :key="projects.id">
+                        <div class="expe-item" v-for="(projects, key) in resume.projects" :key="projects.id">
                         <ul class="expe-title">
                             <li class="date">
                                 <editarea class="date-input" :value="projects.startDate" @edit="onEdit(`projects[${key}].startDate`, $event)"></editarea>
@@ -154,13 +181,21 @@
                         <p class="description">
                             <editarea :value="projects.description" @edit="onEdit(`projects[${key}].description`, $event)"></editarea>
                         </p>
+                        <div class="item-btn-group">
+                            <span class="btn"><i class="iconfont icon-jiahao"></i></span>
+                            <span class="btn" @click="removeItem('projects', key, $event)"><i class="iconfont icon-shanchu"></i></span>
+                        </div>
                     </div>
+                </div>
+                <div class="section-btn-group">
+                    <span class="btn"><i class="iconfont icon-shanchu"></i></span>
+                    <span class="btn" @click="addItem('projects', $event)"><i class="iconfont icon-jiahao"></i></span>
                 </div>
             </section>
         </div>
     </main>
     <div class="dialog-mask" v-if="dialog.visibleMask" @click="closeDialog" v-cloak>
-        <div class="dialog" v-if="dialog.visibleDialog" @click.stop="">
+        <div class="dialog" v-if="dialog.visibleDialog">
             <span class="close-btn" @click="closeDialog" title="关闭">&times;</span>
             <div class="login-box" v-if="dialog.visibleLogin">
                 <div class="dialog-header">登录账号</div>
@@ -207,7 +242,7 @@
                 <div class="links-area">已有账号？<a href="#" @click="showLogin">立即登录</a></div>
             </div>
             <div class="signUp-success" v-if="dialog.signUpSuccess">
-                <div class="dialog-message">注册成功，请检查邮箱并验证。</div>
+                <div class="dialog-message">注册成功，请检查邮箱并验证，邮箱验证后才可登录。</div>
                 <button @click="showLogin">已验证，去登录</button>
             </div>
         </div>

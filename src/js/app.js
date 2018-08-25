@@ -60,6 +60,40 @@ let app = new Vue({
                 },
             ],
         },
+        addToItemData: {
+            workexpe:{
+                startDate: '2016-06',
+                endDate: '2018-06',
+                company: '公司名称',
+                post: '所任职位',
+                description: '详细描述你的职责范围、工作任务及取得的成绩，工作经验的时间采取倒叙形式，工作经验的描述与目标岗位的招聘要求尽量匹配。',
+            },
+            eduexpe: {
+                startDate: '2012-09',
+                endDate: '2016-06',
+                school: '学校名称',
+                discipline: '所学专业',
+                description: '尽量简洁，突出重点，成绩优异的话建议写上GPA及排名等信息。'
+            },
+            skills: {
+                name: '技能名称',
+                description: '这里填写技能描述。'
+            },
+            projects:{
+                startDate: '2018-04',
+                endDate: '2018-05',
+                name: "项目名称",
+                role: "项目中承担的角色",
+                description: "描述你参加的项目负责的工作内容，内容清晰，突出重点，如项目描述、项目职责、项目业绩。",
+            },
+            customize: {
+                startDate: '2017-06',
+                endDate: '2018-06',
+                sSupplement: "补充描述",
+                sSupplement2: "补充描述",
+                description: "补充详细描述。",
+            }
+        },
         module: {
             personalInfo: {
                 name: '基本信息',
@@ -94,7 +128,6 @@ let app = new Vue({
             skills: false,
             projects: false,
         },
-        maskVisible: false,
         dialog:{
             visibleMask: false,
             visibleDialog: false,
@@ -116,13 +149,14 @@ let app = new Vue({
             emailError: '',
             passwdError: '',
         },
-        currentUser: '',
-        isLogIn: false,
         loginReminder: '请注意，当前处于预览状态，数据不会被保存，请登录后制作!',
         updatePrompt: {
             visible: false,
             message: ''
         },
+        currentUser: '',
+        isLogIn: false,
+        maskVisible: false,
         moduleAsideVisible: false,
     },
     methods: {
@@ -359,7 +393,6 @@ let app = new Vue({
             query.get(id).then((user) => {
                 if(user.attributes.resume){
                     Object.assign(this.resume, user.attributes.resume);
-                    console.log(this.module,user.attributes.module);
                     Object.assign(this.module, user.attributes.module);
                     let updateTime = this.timeConversion(user.updatedAt);
                     this.updatePrompt.message = '上次更新时间：' + updateTime;
@@ -383,10 +416,12 @@ let app = new Vue({
                 this.updatePrompt.visible = false
             }
         },
+        /*编辑模块时打开遮罩层*/
         editing(name){
             this.moduleEditing[name] = true;
             this.maskVisible = true;
         },
+        /*关闭遮罩*/
         quitEditing(){
             this.maskVisible = false;
             let module = this.moduleEditing;
@@ -394,12 +429,21 @@ let app = new Vue({
                 module[key] = false;
             })
         },
+        /*打开模块管理*/
         openModuleAside(){
             this.moduleAsideVisible = true
         },
+        /*关闭模块管理*/
         closeModuleAside(){
             this.moduleAsideVisible = false
         },
+        addItem(key){
+            let itemData = this.addToItemData[key];
+            this.resume[key].push(itemData);
+        },
+        removeItem(key, index){
+            this.resume[key].splice(index,1);
+        }
     },
     created(){
         this.hasLogin();
