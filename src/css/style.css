@@ -44,8 +44,21 @@ p,h1,h2,h3,h4,h5,h6{
 }
 
 #header .header-right{
+    position: relative;
+}
+
+#header .header-right > div{
     display: flex;
-    justify-content: last-baseline;
+    justify-content: flex-end;
+}
+
+#header .header-right .login-signup{
+    position: absolute;
+    min-width: 100%;
+    top: 50%;
+    right: 0;
+    transform: translateY(-50%);
+    background-color: #fff;
 }
 
 #header .header-right .login{
@@ -59,6 +72,7 @@ p,h1,h2,h3,h4,h5,h6{
     line-height: 28px;
     padding: 0 10px;
     display: block;
+    white-space:nowrap;
 }
 
 #header .header-right .sign-up{
@@ -76,19 +90,19 @@ p,h1,h2,h3,h4,h5,h6{
 }
 
 #header .prompt{
-    color: #999;
+    color: #13CE66;
     font-size: 14px;
 }
 
 #aside{
     width: 200px;
     height: 100vh;
-    background-color: #fff;
+    /*background-color: #fff;*/
     position: fixed;
     left: 0;
     top: 0;
     padding-top: 100px;
-    border-right: 1px solid #e5e5e5;
+    border-right: 1px solid #2bd8ae;
     z-index: 19;
 }
 
@@ -109,6 +123,7 @@ p,h1,h2,h3,h4,h5,h6{
 
 #aside .resume-operation{
     margin-bottom: 30px;
+    height: 100%;
 }
 
 #aside .resume-content-editor{
@@ -116,28 +131,36 @@ p,h1,h2,h3,h4,h5,h6{
     border-top: 1px solid #e5e5e5;
 }
 
-#aside ul li{
+#aside .resume-operation ul{
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+}
+
+#aside .resume-operation ul li{
     text-align: center;
-    padding: 20px 0;
+    padding: 30px 0;
 }
 
-#aside ul li #sava-resume{
-    border: 1px solid #00c091;
-    color: #00c091;
-    padding: 5px 10px;
-    border-radius: 5px;
-    transition: 0.3s;
-}
-
-#aside ul li #sava-resume:hover{
-    background-color: #00c091;
+#aside ul li a{
     color: #fff;
+    line-height: 30px;
+}
+
+#aside ul li a i,
+#aside .close-module-btn i{
+    margin-right: 10px;
+    font-size: 18px;
+}
+
+#aside ul li a:hover{
+    color: #eee;
 }
 
 #main{
     width: 210mm;
     min-height: 297mm;
-    padding: 12mm;
+    padding: 12mm 6mm;
     box-shadow: 0 0 10px rgba(0,0,0,0.1);
     margin: 100px auto 40px auto;
     background-color: #fff;
@@ -155,11 +178,9 @@ p,h1,h2,h3,h4,h5,h6{
 }
 
 #main .resume .personal-info{
-    border-bottom: 2px solid #00c091;
     display: flex;
     justify-content: space-between;
     padding-bottom: 30px;
-    margin-bottom: 30px;
 }
 
 
@@ -197,14 +218,23 @@ p,h1,h2,h3,h4,h5,h6{
     display: inline;
 }
 
-#main .resume section.active{
-    position: relative;
-    z-index: 30;
-    background-color: #fff;
-    border: 1px #00c091 dashed;
+#main .resume section{
+    padding: 15px 6mm 0;
+    border: 2px transparent dashed;
 }
 
-.musk.active{
+#main .resume section:hover,
+#main .resume section.active{
+    position: relative;
+    background-color: #fff;
+    border-color: #00c091;
+}
+
+#main .resume section.active{
+    z-index: 30;
+}
+
+.mask{
     width: 100vw;
     height: 100vh;
     position: fixed;
@@ -217,7 +247,7 @@ p,h1,h2,h3,h4,h5,h6{
 #main .resume section h2{
     font-size: 20px;
     color: #333;
-    margin: 30px 0 20px;
+    margin: 10px 0 20px;
     font-weight: 600;
     position: relative;
 }
@@ -233,11 +263,6 @@ p,h1,h2,h3,h4,h5,h6{
     background-color: #ccc;
 }
 
-#main .resume section .content{
-    padding: 10px 20px;
-    color: #444;
-}
-
 #main .resume section .content div{
     line-height: 1.8;
 }
@@ -245,19 +270,33 @@ p,h1,h2,h3,h4,h5,h6{
 #main .resume section .expe-title{
     display: flex;
     justify-content: space-between;
-    margin-bottom: 20px;
+    margin-bottom: 15px;
     line-height: 1.8em;
 }
 
 #main .resume section .content .expe-item{
-    margin-bottom: 20px;
-    border-bottom: 1px solid #eee;
-    padding-bottom: 20px;
+    padding: 15px 20px;
+    color: #444;
+    position: relative;
 }
 
-#main .resume section .content .expe-item:last-child{
-    margin-bottom: 0;
-    border-bottom: none;
+#main .resume section .content .expe-item::after{
+    content: '';
+    display: block;
+    position: absolute;
+    width: 100%;
+    height: 1px;
+    background-color: #eee;
+    left: 0;
+    bottom: 0;
+}
+
+#main .resume section .content .expe-item:hover{
+    background-color: #E7F2FF;
+}
+
+#main .resume section .content .expe-item:last-child::after{
+    display: none;
 }
 
 #main .resume section .content .expe-item .date{
@@ -266,13 +305,13 @@ p,h1,h2,h3,h4,h5,h6{
 }
 
 #main .resume .skill .skill-item{
-    margin-bottom: 10px;
+    padding: 10px 20px;
 }
 
 #main .resume .skill .skill-item h3{
     color: #444;
     font-size: 16px;
-    line-height: 1.5em;
+    line-height: 1.2em;
     padding-left: 15px;
     position: relative;
 }
@@ -317,4 +356,76 @@ p,h1,h2,h3,h4,h5,h6{
 
 #header .currentUser .logout:hover{
     color: #00c091;
+}
+
+#aside .module-management{
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    top: 0;
+    left: 0;
+    background-color: #fff;
+    padding-top: 100px;
+    transform: translateX(-100%);
+    transition: 0.3s;
+}
+
+#aside .module-management.active{
+    transform: translateX(0);
+}
+
+#aside .module-management h3{
+    font-size: 18px;
+    color: #00c091;
+    text-align: center;
+    margin-bottom: 30px;
+}
+
+#aside .module-management>ul{
+    margin-bottom: 30px;
+}
+
+#aside .module-management>ul li{
+    color: #666;
+    font-size: 14px;
+    display: flex;
+    justify-content: space-between;
+    line-height: 20px;
+    padding: 15px 45px;
+}
+
+#aside .module-management ul li:first-child .switch-btn:before{
+    display: block;
+    content: '必填';
+    top: 0;
+    left: 0;
+    width: 100%;
+    font-size: 14px;
+    color: #fff;
+    text-align: center;
+    line-height: 18px;
+}
+
+#aside .module-management ul li:first-child .switch-btn:after{
+    display: none;
+}
+
+#aside .module-management .close-module-btn{
+    display: block;
+    width: 120px;
+    margin: 0 auto;
+    border: 1px solid #00c091;
+    color: #00c091;
+    border-radius: 5px;
+    transition: 0.3s;
+    text-align: center;
+    font-size: 14px;
+    user-select: none;
+    cursor: pointer;
+    line-height: 30px;
+}
+
+#aside .module-management .close-module-btn:hover{
+    background-color: #00c091;
+    color: #fff;
 }

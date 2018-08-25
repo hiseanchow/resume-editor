@@ -7,4 +7,5 @@
 .editarea:hover,
 .editarea:focus{
     border: 1px #00c091 dashed;
+    background-color: #E7F2FF;
 }

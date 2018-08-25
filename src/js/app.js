@@ -10,7 +10,7 @@ let app = new Vue({
             phone: '12345678910',
             email: 'example@example.com',
             site: 'example.com',
-            introduction: '用一段简短的文字介绍自己，凸出自己的优势。',
+            introduction:'用一段简短的文字介绍自己，凸出自己的优势。',
             workexpe: [
                 {
                     startDate: '2016-06',
@@ -27,12 +27,16 @@ let app = new Vue({
                     school: '学校名称',
                     discipline: '所学专业',
                     description: '尽量简洁，突出重点，成绩优异的话建议写上GPA及排名等信息，如：GPA：3.72/4（专业前10%）GRE：324'
-                }
+                },
             ],
             skills: [
                 {
                     name: '技能名称',
                     description: 'PHP/ Python/ Node/ Ruby/ Elixir （掌握/基础/理解/熟练应用/使用XXX开发Web应用/开发API/)'
+                },
+                {
+                    name: '前端框架',
+                    description: 'Bootstrap/ AngularJS/ EmberJS/ Vue/ React （掌握/基础/熟练应用/使用XXX开发XXX）'
                 },
                 {
                     name: '前端框架',
@@ -56,6 +60,41 @@ let app = new Vue({
                 },
             ],
         },
+        module: {
+            personalInfo: {
+                name: '基本信息',
+                visible: true,
+            },
+            introduction:{
+                name: '个人简介',
+                visible: true,
+            },
+            workexpe:{
+                name: '工作经历',
+                visible: true,
+            },
+            eduexpe:{
+                name: '教育经历',
+                visible: true,
+            },
+            skills:{
+                name: '技能描述',
+                visible: true,
+            },
+            projects:{
+                name: '项目经历',
+                visible: true,
+            }
+        },
+        moduleEditing: {
+            personalInfo: false,
+            introduction: false,
+            workexpe: false,
+            eduexpe: false,
+            skills: false,
+            projects: false,
+        },
+        maskVisible: false,
         dialog:{
             visibleMask: false,
             visibleDialog: false,
@@ -78,13 +117,16 @@ let app = new Vue({
             passwdError: '',
         },
         currentUser: '',
+        isLogIn: false,
         loginReminder: '请注意，当前处于预览状态，数据不会被保存，请登录后制作!',
         updatePrompt: {
             visible: false,
             message: ''
         },
+        moduleAsideVisible: false,
     },
     methods: {
+        /*编辑框*/
         onEdit(key,value){
             let reg = /\[(\d+)\]/g;
             key = key.replace(reg, (match, number) => `.${number}`);
@@ -97,7 +139,11 @@ let app = new Vue({
                     result = result[keys[i]]
                 }
             }
-            result = value;
+            // result = value;
+        },
+        /*模块管理*/
+        onToggle(key, status){
+            this.module[key].visible = !status;
         },
         /*显示登录对话框*/
         showLogin(e){
@@ -152,28 +198,35 @@ let app = new Vue({
                 date.getMinutes() + ':' +
                 date.getSeconds();
         },
-        /*保存*/
-        saveResume(e){
+        /*点击保存按钮*/
+        clickSaveResume(e){
             e.preventDefault();
             let currentUser = AV.User.current();
             if(currentUser){
                 let id = currentUser.id;
-                console.log(this.resume);
-                let user = AV.Object.createWithoutData('User', id);
-                // 修改属性
-                console.log(this.resume);
-                user.set('resume', this.resume);
-                // 保存到云端
-                user.save().then((res)=>{
-                    let updateTime = this.timeConversion(res.updatedAt);
-                    this.updatePrompt.message = '保存成功，' + updateTime;
-                },(error)=>{
-                    console.log(error);
-                    console.log('保存失败');
-                });
+                this.saveResume(id)
             }else{
                 this.showLogin();
             }
+        },
+        /*保存简历*/
+        saveResume(id){
+            let user = AV.Object.createWithoutData('User', id);
+            // 修改属性
+            user.set('resume', this.resume);
+            user.set('module', this.module);
+            // 保存到云端
+            user.save().then((res)=>{
+                let updateTime = this.timeConversion(res.updatedAt);
+                this.updatePrompt.message = '保存成功，' + updateTime;
+            },(error)=>{
+                console.log(error);
+                console.log('保存失败');
+            });
+        },
+        /*每5分钟自动保存一次*/
+        autoSave(id){
+            setInterval(()=>{ this.saveResume(id) }, 300000)
         },
         /*注册*/
         onSignUp(){
@@ -300,12 +353,14 @@ let app = new Vue({
             AV.User.logOut();
             window.location.reload();
         },
-        /*查询简历*/
+        /*获取简历*/
         getResume(id){
             let query = new AV.Query('User');
             query.get(id).then((user) => {
                 if(user.attributes.resume){
                     Object.assign(this.resume, user.attributes.resume);
+                    console.log(this.module,user.attributes.module);
+                    Object.assign(this.module, user.attributes.module);
                     let updateTime = this.timeConversion(user.updatedAt);
                     this.updatePrompt.message = '上次更新时间：' + updateTime;
                 }
@@ -319,14 +374,37 @@ let app = new Vue({
             if(current){
                 this.getResume(current.id);
                 this.currentUser = current.attributes.username;
+                this.isLogIn = true;
                 this.updatePrompt.visible = true;
+                /*自动保存*/
+                /*this.autoSave(current.id);*/
             }else{
                 this.currentUser = '';
                 this.updatePrompt.visible = false
             }
-        }
+        },
+        editing(name){
+            this.moduleEditing[name] = true;
+            this.maskVisible = true;
+        },
+        quitEditing(){
+            this.maskVisible = false;
+            let module = this.moduleEditing;
+            Object.keys(module).forEach((key)=>{
+                module[key] = false;
+            })
+        },
+        openModuleAside(){
+            this.moduleAsideVisible = true
+        },
+        closeModuleAside(){
+            this.moduleAsideVisible = false
+        },
     },
     created(){
         this.hasLogin();
+        /*window.onbeforeunload = function(event){
+            return '您可能有数据没有保存';
+        };*/
     }
 });

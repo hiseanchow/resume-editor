@@ -6,7 +6,9 @@
     <link rel="stylesheet" href="./css/reset.css">
     <link rel="stylesheet" href="./css/style.css">
     <link rel="stylesheet" href="./css/editarea.css">
+    <link rel="stylesheet" href="./css/switch-btn.css">
     <link rel="stylesheet" href="./css/login.css">
+    <link rel="stylesheet" href="http://at.alicdn.com/t/font_808865_bns9s57sewc.css">
 </head>
 <body>
 <div id="app">
@@ -16,35 +18,40 @@
         </div>
         <div class="prompt login-reminder" v-if="!currentUser" v-cloak>{{loginReminder}}</div>
         <div class="prompt update-prompt" v-if="updatePrompt.visible" v-cloak>{{updatePrompt.message}}</div>
-        <div class="header-right" v-if="!currentUser" v-cloak>
-            <a href="" class="login" @click="showLogin">登录</a>
-            <a href="" class="sign-up" @click="showSignUp">注册</a>
-        </div>
-        <div class="header-right currentUser" v-if="currentUser" v-cloak>
-            <span class="username">{{currentUser}}</span>
-            <a href="" class="logout" @click="logout">注销</a>
+        <div class="header-right">
+            <div class="login-signup" v-if="!isLogIn" v-cloak>
+                <a href="" class="login" @click="showLogin">登录</a>
+                <a href="" class="sign-up" @click="showSignUp">注册</a>
+            </div>
+            <div class="currentUser" v-if="isLogIn" v-cloak>
+                <span class="username">{{currentUser}}</span>
+                <a href="" class="logout" @click="logout">注销</a>
+            </div>
         </div>
     </header>
     <aside id="aside">
         <div class="resume-operation">
             <ul>
-                <li><a href="" id="sava-resume" @click="saveResume">保存编辑</a></li>
-                <li><a href="">打印简历</a></li>
-                <li><a href="">分享简历</a></li>
+                <li><a href="" id="sava-resume" @click="clickSaveResume"><i class="iconfont icon-baocun"></i>保存编辑</a></li>
+                <li><a href=""><i class="iconfont icon-print"></i>打印简历</a></li>
+                <li><a href=""><i class="iconfont icon-zhifeiji"></i>分享简历</a></li>
+                <li><a href="" @click.prevent="openModuleAside"><i class="iconfont icon-mokuaiguanli"></i>模块管理</a></li>
             </ul>
-
         </div>
-        <div class="resume-content-editor">
+        <div class="module-management" :class="{active: moduleAsideVisible}">
             <ul>
-                <li><a href="">模块管理</a></li>
-                <li><a href="">风格设置</a></li>
+                <li v-for="(section, key) in module" :key="section.id">
+                    <span>{{section.name}}</span>
+                    <switch-btn :value="section.visible" @toggle="onToggle(key, section.visible, $event)"></switch-btn>
+                </li>
             </ul>
+            <div class="close-module-btn" @click="closeModuleAside">&lt;&lt; 收起</div>
         </div>
     </aside>
     <main id="main">
         <div class="resume">
             <div>{{resume}}</div>
-            <section class="personal-info">
+            <section class="personal-info" :class="{ active: moduleEditing.personalInfo }" @click="editing('personalInfo')">
                 <div class="left">
                     <editarea class="name" :value="resume.name" @edit="onEdit('name', $event)"></editarea>
                     <p class="areer-objective">求职意向：<editarea :value="resume.objective" @edit="onEdit('objective', $event)"></editarea></p>
@@ -62,13 +69,13 @@
                     </ul>
                 </div>
             </section>
-            <section class="introduction">
+            <section class="introduction" :class="{ active: moduleEditing.introduction }" v-if="module.introduction.visible" @click="editing('introduction')">
                 <h2>个人简介</h2>
                 <div class="content">
                     <editarea :value="resume.introduction" @edit="onEdit('introduction', $event)"></editarea>
                 </div>
             </section>
-            <section class="work">
+            <section class="work" :class="{ active: moduleEditing.workexpe }" v-if="module.workexpe.visible" @click="editing('workexpe')">
                 <h2>工作经历</h2>
                 <div class="content">
                     <div class="expe-item" v-for="(workexpe, key) in resume.workexpe" :key="workexpe.id">
@@ -91,7 +98,7 @@
                     </div>
                 </div>
             </section>
-            <section class="edu">
+            <section class="edu" :class="{active: moduleEditing.eduexpe}" v-if="module.eduexpe.visible" @click="editing('eduexpe')">
                 <h2>教育经历</h2>
                 <div class="content">
                     <div class="expe-item" v-for="(eduexpe, key) in resume.eduexpe" :key="eduexpe.id">
@@ -114,10 +121,10 @@
                     </div>
                 </div>
             </section>
-            <section class="skill">
+            <section class="skill" :class="{active: moduleEditing.skills}" v-if="module.skills.visible" @click="editing('skills')">
                 <h2>技能描述</h2>
                 <div class="content">
-                    <div class="skill-item" v-for="(skills, key) in resume.skills" :key="skills.id">
+                    <div class="expe-item skill-item" v-for="(skills, key) in resume.skills" :key="skills.id">
                         <h3>
                             <editarea :value="skills.name" @edit="onEdit(`eduexpe[${key}].name`, $event)"></editarea>
                         </h3>
@@ -127,7 +134,7 @@
                     </div>
                 </div>
             </section>
-            <section class="project">
+            <section class="project" :class="{ active: moduleEditing.projects }" v-if="module.projects.visible" @click="editing('projects')">
                 <h2>项目经历</h2>
                 <div class="content">
                     <div class="expe-item" v-for="(projects, key) in resume.projects" :key="projects.id">
@@ -161,10 +168,12 @@
                     <ul>
                         <li>
                             <span class="error-message" v-if="logInForm.emailError">{{logInForm.emailError}}</span>
-                            <input type="text" name="userID" placeholder="邮箱" v-model="logInForm.email">
+                            <label for="userID"><i class="iconfont icon-zhanghao"></i></label>
+                            <input type="text" name="userID" id="userID" placeholder="邮箱" v-model="logInForm.email">
                         </li>
                         <li>
                             <span class="error-message" v-if="logInForm.passwdError">{{logInForm.passwdError}}</span>
+                            <label for="userID"><i class="iconfont icon-mima"></i></label>
                             <input type="password" name="userPass" placeholder="密码" v-model="logInForm.passwd">
                         </li>
 
@@ -179,14 +188,17 @@
                     <ul>
                         <li>
                             <span class="error-message" v-if="signUpForm.emailError">{{signUpForm.emailError}}</span>
+                            <label for="userID"><i class="iconfont icon-zhanghao"></i></label>
                             <input type="text" name="sign-up-userID" placeholder="请输入注册邮箱" v-model="signUpForm.email">
                         </li>
                         <li>
                             <span class="error-message" v-if="signUpForm.passwdError">{{signUpForm.passwdError}}</span>
+                            <label for="userID"><i class="iconfont icon-mima"></i></label>
                             <input type="password" name="sign-up-userPass" placeholder="请输入密码" v-model="signUpForm.passwd">
                         </li>
                         <li>
                             <span class="error-message" v-if="signUpForm.confirmPasswdError">{{signUpForm.confirmPasswdError}}</span>
+                            <label for="userID"><i class="iconfont icon-querenmima"></i></label>
                             <input type="password" name="confirm-passwd" placeholder="请再次输入密码" v-model="signUpForm.confirmPasswd">
                         </li>
                         <li><button type="submit">注册</button></li>
@@ -200,13 +212,14 @@
             </div>
         </div>
     </div>
-    <div class="musk"></div>
+    <div class="mask" v-if="maskVisible" @click="quitEditing" v-cloak></div>
 </div>
 <script src="../vendors/js/av-min.js"></script>
 <script src="../vendors/js/vue.min.js"></script>
 <script src="../vendors/laydate/laydate.js"></script>
 <script src="js/init-av.js"></script>
 <script src="js/editarea.js"></script>
+<script src="js/switch-btn.js"></script>
 <script src="js/app.js"></script>
 <script src="js/init-laydata.js"></script>
 </body>
