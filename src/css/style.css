@@ -1,7 +1,3 @@
-body{
-    background-color: #00c091;
-}
-
 .clearfix{
     zoom: 1;
 }
@@ -20,7 +16,15 @@ p,h1,h2,h3,h4,h5,h6{
     max-height: 999999px;
 }
 
-#header{
+#app{
+    background-color: #00c091;
+    padding-top: 100px;
+    padding-bottom: 40px;
+    transition: 0.3s;
+}
+
+#header,
+.print-header{
     position: fixed;
     display: flex;
     justify-content: space-between;
@@ -35,6 +39,20 @@ p,h1,h2,h3,h4,h5,h6{
     background-color: #fff;
     border-bottom: 1px solid #eee;
     z-index: 20;
+}
+
+.print-header{
+    padding: 0;
+}
+
+.print-header .back-btn,
+.print-header .print-btn{
+    height: 100%;
+    padding: 0 50px;
+    background-color: #00c091;
+    color: #fff;
+    user-select: none;
+    cursor: pointer;
 }
 
 #header .logo{
@@ -158,11 +176,11 @@ p,h1,h2,h3,h4,h5,h6{
 }
 
 #main{
-    width: 210mm;
-    min-height: 297mm;
-    padding: 12mm 6mm;
+    width: 800px;
+    min-height: 1066px;
+    padding: 20px;
     box-shadow: 0 0 10px rgba(0,0,0,0.1);
-    margin: 100px auto 40px auto;
+    margin: 0 auto;
     background-color: #fff;
     position: relative;
 }
@@ -479,4 +497,37 @@ p,h1,h2,h3,h4,h5,h6{
     cursor: pointer;
     user-select: none;
     border-radius: 3px;
+}
+
+.preview > header,
+.preview > aside,
+.preview .dialog-wrapper,
+.preview .mask,
+#app.inprint .print-header{
+    visibility: hidden;
+}
+#app.preview{
+    background-color: #E7F2FF;
+}
+
+.preview #main .section-btn-group,
+.preview #main .item-btn-group{
+    display: none;
+}
+
+.preview #main .editarea:hover,
+.preview #main .editarea:focus,
+.preview #main section:hover,
+.preview #main section.active,
+.preview #main .resume section .content .expe-item:hover{
+    background-color: transparent;
+    border-color: transparent;
+}
+
+#app.inprint{
+    padding: 0;
+}
+
+#app.inprint #main{
+    padding: 0;
 }

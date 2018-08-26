@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="en">
+<html lang="zh-Hans">
 <head>
     <meta charset="UTF-8">
     <title>简历编辑器</title>
@@ -11,7 +11,7 @@
     <link rel="stylesheet" href="http://at.alicdn.com/t/font_808865_weg9mbq0uer.css">
 </head>
 <body>
-<div id="app">
+<div id="app" :class="{preview: printPreview, inprint: inPrint}">
     <header id="header">
         <div class="logo">
             <h1>简历编辑器</h1>
@@ -29,11 +29,15 @@
             </div>
         </div>
     </header>
+    <div class="print-header" v-if="!inPrint && printPreview" v-cloak>
+        <div @click="backEdit" class="btn back-btn">返回编辑</div>
+        <div @click="clickPrint" class="btn print-btn">打印</div>
+    </div>
     <aside id="aside">
         <div class="resume-operation">
             <ul>
                 <li><a href="" id="sava-resume" @click.prevent="clickSaveResume"><i class="iconfont icon-baocun"></i>保存编辑</a></li>
-                <li><a href=""><i class="iconfont icon-print"></i>打印简历</a></li>
+                <li><a href="" @click.prevent="print"><i class="iconfont icon-print"></i>打印预览</a></li>
                 <li><a href=""><i class="iconfont icon-zhifeiji"></i>分享简历</a></li>
                 <li><a href="" @click.prevent="openModuleAside"><i class="iconfont icon-mokuaiguanli"></i>模块管理</a></li>
             </ul>
@@ -48,9 +52,10 @@
             <div class="close-module-btn" @click="closeModuleAside">&lt;&lt; 收起</div>
         </div>
     </aside>
+    <!--startprint-->
     <main id="main">
         <div class="resume">
-            <div>{{resume}}</div>
+            <!--<div>{{resume}}</div>-->
             <section class="personal-info" :class="{ active: moduleEditing.personalInfo }" @click="editing('personalInfo')">
                 <div class="left">
                     <editarea class="name" :value="resume.name" @edit="onEdit('name', $event)"></editarea>
@@ -194,6 +199,7 @@
             </section>
         </div>
     </main>
+    <!--endprint-->
     <div class="dialog-wrapper" v-if="dialog.maskVisible" v-cloak>
         <!--登录对话框-->
         <div class="dialog-box" v-if="dialog.loginVisible">

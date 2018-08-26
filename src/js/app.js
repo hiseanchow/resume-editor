@@ -162,6 +162,8 @@ let app = new Vue({
         isLogIn: false,
         maskVisible: false,
         moduleAsideVisible: false,
+        printPreview: false,
+        inPrint: false
     },
     methods: {
         /*编辑框*/
@@ -483,6 +485,24 @@ let app = new Vue({
                 arr.splice(index,1, arr[index + 1]);
                 arr.splice(index + 1, 1, temp);
             }
+        },
+        print(){
+            this.printPreview = true
+            /*let newWindow = window.open("_blank");
+            let printHtml = document.getElementById("main").innerHTML;
+            let printBox = document.getElementById("print-div");
+            printBox.innerHTML = printHtml;*/
+            // newWindow.print();
+        },
+        backEdit(){
+            this.printPreview = false
+        },
+        clickPrint(){
+            this.inPrint = true;
+            setTimeout(()=>{
+                window.print();
+                this.inPrint = false;
+            },500)
         }
     },
     created(){
