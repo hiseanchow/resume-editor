@@ -1,4 +1,4 @@
-.dialog-mask{
+.dialog-wrapper{
     position: fixed;
     top: 0;
     left: 0;
@@ -7,22 +7,32 @@
     display: flex;
     justify-content: center;
     align-items: center;
-    z-index: 50;
-    background-color: rgba(0,0,0,0.5);
+    z-index: 80;
 }
-.dialog{
+
+.dialog-mask{
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background-color: rgba(0,0,0,0.5);
+    z-index: 40;
+}
+
+.dialog-box{
     width: 400px;
     padding: 50px;
     background-color: #fff;
-    z-index: 60;
     box-shadow: 0 0 30px rgba(0,0,0,0.3);
     overflow: hidden;
     border-radius: 10px;
     box-sizing: border-box;
     position: relative;
+    z-index: 50;
 }
 
-.dialog .close-btn{
+.dialog-box .close-btn{
     position: absolute;
     right: 3px;
     top: 3px;
@@ -37,7 +47,7 @@
     user-select: none;
 }
 
-.dialog .dialog-header{
+.dialog-box .dialog-header{
     margin-bottom: 30px;
     font-size: 24px;
     font-weight: bold;
@@ -45,12 +55,12 @@
     text-align: center;
 }
 
-.dialog ul li{
+.dialog-box form ul li{
     margin-bottom: 30px;
     text-align: center;
 }
 
-.dialog input{
+.dialog-box form input{
     width: 100%;
     height: 40px;
     padding: 10px 10px 10px 40px;
@@ -60,16 +70,16 @@
     outline: none;
 }
 
-.dialog input:focus,
-.dialog input:hover{
+.dialog-box form input:focus,
+.dialog-box form input:hover{
     border: 1px solid #00c091;
 }
 
-.dialog input:focus{
+.dialog-box form input:focus{
     box-shadow: 0 0 3px #00c091;
 }
 
-.dialog button{
+.dialog-box button{
     width: 100%;
     height: 40px;
     background-color: #00c091;
@@ -81,11 +91,11 @@
     font-size: 14px;
 }
 
-.dialog button:hover{
+.dialog-box button:hover{
     background-color: #00C010;
 }
 
-.dialog .links-area{
+.dialog-box .links-area{
     text-align: center;
     display: flex;
     font-size: 14px;
@@ -93,7 +103,7 @@
     justify-content: center;
 }
 
-.dialog .links-area a{
+.dialog-box .links-area a{
     color: #999;
     display: block;
     padding-right: 15px;
@@ -101,11 +111,11 @@
     position: relative;
 }
 
-.dialog .links-area a:hover{
+.dialog-box .links-area a:hover{
     color: #00c091;
 }
 
-.dialog .links-area a::after{
+.dialog-box .links-area a::after{
     content: '';
     display: block;
     position: absolute;
@@ -116,16 +126,16 @@
     background-color: #999;
 }
 
-.dialog .links-area a:last-child{
+.dialog-box .links-area a:last-child{
     padding-right: 0;
     margin-right: 0;
 }
 
-.dialog .links-area a:last-child::after{
+.dialog-box .links-area a:last-child::after{
     display: none;
 }
 
-.dialog .error-message{
+.dialog-box .error-message{
     font-size: 14px;
     display: block;
     text-align: left;
@@ -133,7 +143,7 @@
     line-height: 2em;
 }
 
-.dialog .dialog-message{
+.dialog-box .dialog-message{
     color: #00c091;
     margin-bottom: 40px;
     font-size: 18px;
@@ -141,11 +151,11 @@
     line-height: 2em;
 }
 
-.dialog form ul li{
+.dialog-box form ul li{
     position: relative;
 }
 
-.dialog form ul li label{
+.dialog-box form ul li label{
     position: absolute;
     top: 0;
     left: 0;
@@ -154,7 +164,7 @@
     text-align: center;
 }
 
-.dialog form ul li label i{
+.dialog-box form ul li label i{
     font-size: 16px;
     color: #999;
 }

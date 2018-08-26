@@ -8,7 +8,7 @@
     <link rel="stylesheet" href="./css/editarea.css">
     <link rel="stylesheet" href="./css/switch-btn.css">
     <link rel="stylesheet" href="./css/login.css">
-    <link rel="stylesheet" href="http://at.alicdn.com/t/font_808865_fgfu22d8w0s.css">
+    <link rel="stylesheet" href="http://at.alicdn.com/t/font_808865_weg9mbq0uer.css">
 </head>
 <body>
 <div id="app">
@@ -20,8 +20,8 @@
         <div class="prompt update-prompt" v-if="updatePrompt.visible" v-cloak>{{updatePrompt.message}}</div>
         <div class="header-right">
             <div class="login-signup" v-if="!isLogIn" v-cloak>
-                <a href="" class="login" @click="showLogin">登录</a>
-                <a href="" class="sign-up" @click="showSignUp">注册</a>
+                <a href="" class="login" @click.prevent="showLogin">登录</a>
+                <a href="" class="sign-up" @click.prevent="showSignUp">注册</a>
             </div>
             <div class="currentUser" v-if="isLogIn" v-cloak>
                 <span class="username">{{currentUser}}</span>
@@ -32,7 +32,7 @@
     <aside id="aside">
         <div class="resume-operation">
             <ul>
-                <li><a href="" id="sava-resume" @click="clickSaveResume"><i class="iconfont icon-baocun"></i>保存编辑</a></li>
+                <li><a href="" id="sava-resume" @click.prevent="clickSaveResume"><i class="iconfont icon-baocun"></i>保存编辑</a></li>
                 <li><a href=""><i class="iconfont icon-print"></i>打印简历</a></li>
                 <li><a href=""><i class="iconfont icon-zhifeiji"></i>分享简历</a></li>
                 <li><a href="" @click.prevent="openModuleAside"><i class="iconfont icon-mokuaiguanli"></i>模块管理</a></li>
@@ -75,7 +75,7 @@
                     <editarea :value="resume.introduction" @edit="onEdit('introduction', $event)"></editarea>
                 </div>
                 <div class="section-btn-group">
-                    <span class="btn add-item-btn"><i class="iconfont icon-shanchu"></i></span>
+                    <!--<span class="btn add-item-btn"><i class="iconfont icon-shanchu"></i></span>-->
                 </div>
             </section>
             <section class="work" :class="{ active: moduleEditing.workexpe }" v-if="module.workexpe.visible" @click="editing('workexpe')">
@@ -99,13 +99,13 @@
                             <editarea :value="workexpe.description" @edit="onEdit(`workexpe[${key}].description`, $event)"></editarea>
                         </p>
                         <div class="item-btn-group">
-                            <span class="btn"><i class="iconfont icon-jiahao"></i></span>
-                            <span class="btn" @click="removeItem('workexpe', key, $event)"><i class="iconfont icon-shanchu"></i></span>
+                            <span class="btn" @click.stop="moveUp('workexpe', key, $event)"><i class="iconfont icon-arrow-up"></i></span>
+                            <span class="btn" @click.stop="moveDown('workexpe', key, $event)"><i class="iconfont icon-arrow-down"></i></span>
+                            <span class="btn" @click.stop="removeItem('workexpe', key, $event)"><i class="iconfont icon-shanchu"></i></span>
                         </div>
                     </div>
                 </div>
                 <div class="section-btn-group">
-                    <span class="btn"><i class="iconfont icon-shanchu"></i></span>
                     <span class="btn" @click="addItem('workexpe', $event)"><i class="iconfont icon-jiahao"></i></span>
                 </div>
             </section>
@@ -130,13 +130,13 @@
                             <editarea :value="eduexpe.description" @edit="onEdit(`eduexpe[${key}].description`, $event)"></editarea>
                         </p>
                         <div class="item-btn-group">
-                            <span class="btn"><i class="iconfont icon-jiahao"></i></span>
-                            <span class="btn" @click="removeItem('eduexpe', key, $event)"><i class="iconfont icon-shanchu"></i></span>
+                            <span class="btn" @click.stop="moveUp('eduexpe', key, $event)"><i class="iconfont icon-arrow-up"></i></span>
+                            <span class="btn" @click.stop="moveDown('eduexpe', key, $event)"><i class="iconfont icon-arrow-down"></i></span>
+                            <span class="btn" @click.stop="removeItem('eduexpe', key, $event)"><i class="iconfont icon-shanchu"></i></span>
                         </div>
                     </div>
                 </div>
                 <div class="section-btn-group">
-                    <span class="btn"><i class="iconfont icon-shanchu"></i></span>
                     <span class="btn" @click="addItem('eduexpe', $event)"><i class="iconfont icon-jiahao"></i></span>
                 </div>
             </section>
@@ -145,19 +145,19 @@
                 <div class="content">
                     <div class="expe-item skill-item" v-for="(skills, key) in resume.skills" :key="skills.id">
                         <h3>
-                            <editarea :value="skills.name" @edit="onEdit(`eduexpe[${key}].name`, $event)"></editarea>
+                            <editarea :value="skills.name" @edit="onEdit(`skills[${key}].name`, $event)"></editarea>
                         </h3>
                         <p>
                             <editarea :value="skills.description" @edit="onEdit(`skills[${key}].description`, $event)"></editarea>
                         </p>
                         <div class="item-btn-group">
-                            <span class="btn"><i class="iconfont icon-jiahao"></i></span>
-                            <span class="btn" @click="removeItem('skills', key, $event)"><i class="iconfont icon-shanchu"></i></span>
+                            <span class="btn" @click.stop="moveUp('skills', key, $event)"><i class="iconfont icon-arrow-up"></i></span>
+                            <span class="btn" @click.stop="moveDown('skills', key, $event)"><i class="iconfont icon-arrow-down"></i></span>
+                            <span class="btn" @click.stop="removeItem('skills', key, $event)"><i class="iconfont icon-shanchu"></i></span>
                         </div>
                     </div>
                 </div>
                 <div class="section-btn-group">
-                    <span class="btn"><i class="iconfont icon-shanchu"></i></span>
                     <span class="btn" @click="addItem('skills', $event)"><i class="iconfont icon-jiahao"></i></span>
                 </div>
             </section>
@@ -182,70 +182,85 @@
                             <editarea :value="projects.description" @edit="onEdit(`projects[${key}].description`, $event)"></editarea>
                         </p>
                         <div class="item-btn-group">
-                            <span class="btn"><i class="iconfont icon-jiahao"></i></span>
-                            <span class="btn" @click="removeItem('projects', key, $event)"><i class="iconfont icon-shanchu"></i></span>
+                            <span class="btn" @click.stop="moveUp('projects', key, $event)"><i class="iconfont icon-arrow-up"></i></span>
+                            <span class="btn" @click.stop="moveDown('projects', key, $event)"><i class="iconfont icon-arrow-down"></i></span>
+                            <span class="btn" @click.stop="removeItem('projects', key, $event)"><i class="iconfont icon-shanchu"></i></span>
                         </div>
                     </div>
                 </div>
                 <div class="section-btn-group">
-                    <span class="btn"><i class="iconfont icon-shanchu"></i></span>
                     <span class="btn" @click="addItem('projects', $event)"><i class="iconfont icon-jiahao"></i></span>
                 </div>
             </section>
         </div>
     </main>
-    <div class="dialog-mask" v-if="dialog.visibleMask" @click="closeDialog" v-cloak>
-        <div class="dialog" v-if="dialog.visibleDialog">
-            <span class="close-btn" @click="closeDialog" title="关闭">&times;</span>
-            <div class="login-box" v-if="dialog.visibleLogin">
-                <div class="dialog-header">登录账号</div>
-                <form action="" @submit.prevent="onLogin">
-                    <ul>
-                        <li>
-                            <span class="error-message" v-if="logInForm.emailError">{{logInForm.emailError}}</span>
-                            <label for="userID"><i class="iconfont icon-zhanghao"></i></label>
-                            <input type="text" name="userID" id="userID" placeholder="邮箱" v-model="logInForm.email">
-                        </li>
-                        <li>
-                            <span class="error-message" v-if="logInForm.passwdError">{{logInForm.passwdError}}</span>
-                            <label for="userID"><i class="iconfont icon-mima"></i></label>
-                            <input type="password" name="userPass" placeholder="密码" v-model="logInForm.passwd">
-                        </li>
+    <div class="dialog-wrapper" v-if="dialog.maskVisible" v-cloak>
+        <!--登录对话框-->
+        <div class="dialog-box" v-if="dialog.loginVisible">
+            <span class="close-btn" @click="closeDialog('loginVisible')" title="关闭">&times;</span>
+            <div class="dialog-header">登录账号</div>
+            <form action="" @submit.prevent="onLogin">
+                <ul>
+                    <li>
+                        <span class="error-message" v-if="logInForm.emailError">{{logInForm.emailError}}</span>
+                        <label for="userID"><i class="iconfont icon-zhanghao"></i></label>
+                        <input type="text" name="userID" id="userID" placeholder="邮箱" v-model="logInForm.email">
+                    </li>
+                    <li>
+                        <span class="error-message" v-if="logInForm.passwdError">{{logInForm.passwdError}}</span>
+                        <label for="userID"><i class="iconfont icon-mima"></i></label>
+                        <input type="password" name="userPass" placeholder="密码" v-model="logInForm.passwd">
+                    </li>
 
-                        <li><button>登录</button></li>
-                    </ul>
-                </form>
-                <div class="links-area"><a href="#">忘记密码</a><a href="#" @click="showSignUp">立即注册</a></div>
-            </div>
-            <div class="sign-up-box" v-if="dialog.visibleSignUp">
-                <div class="dialog-header">注册账号</div>
-                <form action="" @submit.prevent="onSignUp">
-                    <ul>
-                        <li>
-                            <span class="error-message" v-if="signUpForm.emailError">{{signUpForm.emailError}}</span>
-                            <label for="userID"><i class="iconfont icon-zhanghao"></i></label>
-                            <input type="text" name="sign-up-userID" placeholder="请输入注册邮箱" v-model="signUpForm.email">
-                        </li>
-                        <li>
-                            <span class="error-message" v-if="signUpForm.passwdError">{{signUpForm.passwdError}}</span>
-                            <label for="userID"><i class="iconfont icon-mima"></i></label>
-                            <input type="password" name="sign-up-userPass" placeholder="请输入密码" v-model="signUpForm.passwd">
-                        </li>
-                        <li>
-                            <span class="error-message" v-if="signUpForm.confirmPasswdError">{{signUpForm.confirmPasswdError}}</span>
-                            <label for="userID"><i class="iconfont icon-querenmima"></i></label>
-                            <input type="password" name="confirm-passwd" placeholder="请再次输入密码" v-model="signUpForm.confirmPasswd">
-                        </li>
-                        <li><button type="submit">注册</button></li>
-                    </ul>
-                </form>
-                <div class="links-area">已有账号？<a href="#" @click="showLogin">立即登录</a></div>
-            </div>
-            <div class="signUp-success" v-if="dialog.signUpSuccess">
-                <div class="dialog-message">注册成功，请检查邮箱并验证，邮箱验证后才可登录。</div>
-                <button @click="showLogin">已验证，去登录</button>
+                    <li><button>登录</button></li>
+                </ul>
+            </form>
+            <div class="links-area"><a href="#">忘记密码</a><a href="#" @click.prevent="showSignUp">立即注册</a></div>
+        </div>
+        <!--注册对话框start-->
+        <div class="dialog-box" v-if="dialog.signUpVisible">
+            <span class="close-btn" @click="closeDialog('signUpVisible')" title="关闭">&times;</span>
+            <div class="dialog-header">注册账号</div>
+            <form action="" @submit.prevent="onSignUp">
+                <ul>
+                    <li>
+                        <span class="error-message" v-if="signUpForm.emailError">{{signUpForm.emailError}}</span>
+                        <label for="userID"><i class="iconfont icon-zhanghao"></i></label>
+                        <input type="text" name="sign-up-userID" placeholder="请输入注册邮箱" v-model="signUpForm.email">
+                    </li>
+                    <li>
+                        <span class="error-message" v-if="signUpForm.passwdError">{{signUpForm.passwdError}}</span>
+                        <label for="userID"><i class="iconfont icon-mima"></i></label>
+                        <input type="password" name="sign-up-userPass" placeholder="请输入密码" v-model="signUpForm.passwd">
+                    </li>
+                    <li>
+                        <span class="error-message" v-if="signUpForm.confirmPasswdError">{{signUpForm.confirmPasswdError}}</span>
+                        <label for="userID"><i class="iconfont icon-querenmima"></i></label>
+                        <input type="password" name="confirm-passwd" placeholder="请再次输入密码" v-model="signUpForm.confirmPasswd">
+                    </li>
+                    <li><button type="submit">注册</button></li>
+                </ul>
+            </form>
+            <div class="links-area">已有账号？<a href="#" @click.prevent="showLogin">立即登录</a></div>
+        </div>
+        <!--注册成功提示对话框-->
+        <div class="dialog-box" v-if="dialog.signUpSuccess">
+            <span class="close-btn" @click="closeDialog('signUpSuccess')" title="关闭">&times;</span>
+            <div class="dialog-message">注册成功，请检查邮箱并验证，邮箱验证后才可登录。</div>
+            <button @click="showLogin">已验证，去登录</button>
+        </div>
+        <!--确认消息对话框-->
+        <div class="dialog-box message-box" v-if="dialog.messageVisible">
+            <span class="close-btn" @click="closeDialog('messageVisible')" title="关闭">&times;</span>
+            <div class="dialog-header">{{dialogMessage.title}}</div>
+            <div class="message-box-message">{{dialogMessage.message}}</div>
+            <div class="message-box-btn">
+                <button class="btn determine" id="determine-btn">确定</button>
+                <button class="btn cancel" id="cancel-btn">取消</button>
             </div>
         </div>
+        <!--遮罩层-->
+        <div class="dialog-mask" @click="closeDialog()" v-cloak></div>
     </div>
     <div class="mask" v-if="maskVisible" @click="quitEditing" v-cloak></div>
 </div>

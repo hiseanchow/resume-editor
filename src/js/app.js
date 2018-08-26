@@ -129,11 +129,15 @@ let app = new Vue({
             projects: false,
         },
         dialog:{
-            visibleMask: false,
-            visibleDialog: false,
-            visibleLogin: false,
-            visibleSignUp: false,
+            signUpVisible: false,
+            loginVisible: false,
+            messageVisible: false,
             signUpSuccess: false,
+            maskVisible: false,
+        },
+        dialogMessage: {
+            title: '',
+            message: '',
         },
         signUpForm:{
             email: '',
@@ -179,48 +183,59 @@ let app = new Vue({
         onToggle(key, status){
             this.module[key].visible = !status;
         },
-        /*显示登录对话框*/
-        showLogin(e){
-            if(e){
-                e.preventDefault();
+        /*弹出对话框*/
+        showDialog(){
+            this.dialog.maskVisible = true;
+        },
+        /*关闭对话框*/
+        closeDialog(dialogName){
+            if(dialogName){
+                this.dialog[dialogName] = false;
+            }else{
+                let dialog = this.dialog;
+                Object.keys(dialog).forEach((key)=>{
+                    if(dialog[key]){
+                        dialog[key] = false
+                    }
+                });
             }
+            this.dialog.maskVisible = false;
+        },
+        /*显示登录对话框*/
+        showLogin(){
             this.showDialog();
-            if(this.dialog.visibleSignUp){
-                this.dialog.visibleSignUp = false;
+            if(this.dialog.signUpVisible){
+                this.dialog.signUpVisible = false;
             }else if(this.dialog.signUpSuccess){
                 this.dialog.signUpSuccess = false;
             }
-            this.dialog.visibleLogin = true;
+            this.dialog.loginVisible = true;
         },
         /*显示注册对话框*/
-        showSignUp(e){
-            if(e){
-                e.preventDefault();
-            }
+        showSignUp(){
             this.showDialog();
-            if(this.dialog.visibleLogin){
-                this.dialog.visibleLogin = false;
+            if(this.dialog.loginVisible){
+                this.dialog.loginVisible = false;
             }
-            this.dialog.visibleSignUp = true;
-        },
-        /*弹出对话框*/
-        showDialog(){
-            this.dialog.visibleMask = true;
-            this.dialog.visibleDialog = true;
+            this.dialog.signUpVisible = true;
         },
         /*登录成功*/
-        signUpSuccess(e){
-            if(e){
-                e.preventDefault();
-            }
-            this.showDialog();
-            this.dialog.visibleSignUp = false;
+        signUpSuccess(){
+            this.dialog.signUpVisible = false;
             this.dialog.signUpSuccess = true;
         },
-        /*关闭对话框*/
-        closeDialog(){
-            this.dialog.visibleMask = false;
-            this.dialog.visibleDialog = false;
+        showMessageDialog(title,message,btn){
+            this.dialogMessage.title = title;
+            this.dialogMessage.message = message;
+            this.dialog.maskVisible = true;
+            this.dialog.messageVisible = true;
+            return new Promise((resolve, reject) => {
+                if(btn === 'determine-btn'){
+                    resolve();
+                }else if(btn === 'cancel-btn'){
+                    reject();
+                }
+            })
         },
         /*时间格式转换*/
         timeConversion(time){
@@ -233,8 +248,7 @@ let app = new Vue({
                 date.getSeconds();
         },
         /*点击保存按钮*/
-        clickSaveResume(e){
-            e.preventDefault();
+        clickSaveResume(){
             let currentUser = AV.User.current();
             if(currentUser){
                 let id = currentUser.id;
@@ -421,13 +435,15 @@ let app = new Vue({
             this.moduleEditing[name] = true;
             this.maskVisible = true;
         },
-        /*关闭遮罩*/
+        /*退出编辑模式，关闭遮罩*/
         quitEditing(){
-            this.maskVisible = false;
             let module = this.moduleEditing;
             Object.keys(module).forEach((key)=>{
-                module[key] = false;
-            })
+                if(module[key]){
+                    module[key] = false;
+                }
+            });
+            this.maskVisible = false;
         },
         /*打开模块管理*/
         openModuleAside(){
@@ -442,7 +458,31 @@ let app = new Vue({
             this.resume[key].push(itemData);
         },
         removeItem(key, index){
-            this.resume[key].splice(index,1);
+            this.quitEditing();
+            // this.showMessageDialog('确定删除当前子模块吗？','删除后将无法恢复。')
+            if (window.confirm("确认删除吗？删除后不可恢复")) {
+                this.resume[key].splice(index,1)
+            }
+        },
+        moveUp(key,index){
+            let arr = this.resume[key];
+            if(index <= 0){
+                console.log('到头了！')
+            }else{
+                let temp = arr[index];
+                arr.splice(index,1, arr[index - 1]);
+                arr.splice(index - 1, 1, temp);
+            }
+        },
+        moveDown(key,index){
+            let arr = this.resume[key];
+            if(index >= arr.length - 1){
+                console.log('到头了！')
+            }else{
+                let temp = arr[index];
+                arr.splice(index,1, arr[index + 1]);
+                arr.splice(index + 1, 1, temp);
+            }
         }
     },
     created(){
