@@ -131,27 +131,8 @@ let app = new Vue({
         dialog:{
             signUpVisible: false,
             loginVisible: false,
-            messageVisible: false,
-            signUpSuccess: false,
+            signUpSuccessVisible: false,
             maskVisible: false,
-        },
-        dialogMessage: {
-            title: '',
-            message: '',
-        },
-        signUpForm:{
-            email: '',
-            passwd: '',
-            confirmPasswd: '',
-            emailError: '',
-            passwdError: '',
-            confirmPasswdError: '',
-        },
-        logInForm:{
-            email: '',
-            passwd: '',
-            emailError: '',
-            passwdError: '',
         },
         loginReminder: '请注意，当前处于预览状态，数据不会被保存，请登录后制作!',
         updatePrompt: {
@@ -162,25 +143,10 @@ let app = new Vue({
         isLogIn: false,
         maskVisible: false,
         moduleAsideVisible: false,
-        printPreview: false,
+        preview: false,
         inPrint: false
     },
     methods: {
-        /*编辑框*/
-        onEdit(key,value){
-            let reg = /\[(\d+)\]/g;
-            key = key.replace(reg, (match, number) => `.${number}`);
-            let keys = key.split('.');
-            let result = this.resume;
-            for(let i = 0; i < keys.length; i++){
-                if(i === keys.length - 1){
-                    result[keys[i]] = value
-                }else{
-                    result = result[keys[i]]
-                }
-            }
-            // result = value;
-        },
         /*模块管理*/
         onToggle(key, status){
             this.module[key].visible = !status;
@@ -208,8 +174,8 @@ let app = new Vue({
             this.showDialog();
             if(this.dialog.signUpVisible){
                 this.dialog.signUpVisible = false;
-            }else if(this.dialog.signUpSuccess){
-                this.dialog.signUpSuccess = false;
+            }else if(this.dialog.signUpSuccessVisible){
+                this.dialog.signUpSuccessVisible = false;
             }
             this.dialog.loginVisible = true;
         },
@@ -224,20 +190,7 @@ let app = new Vue({
         /*登录成功*/
         signUpSuccess(){
             this.dialog.signUpVisible = false;
-            this.dialog.signUpSuccess = true;
-        },
-        showMessageDialog(title,message,btn){
-            this.dialogMessage.title = title;
-            this.dialogMessage.message = message;
-            this.dialog.maskVisible = true;
-            this.dialog.messageVisible = true;
-            return new Promise((resolve, reject) => {
-                if(btn === 'determine-btn'){
-                    resolve();
-                }else if(btn === 'cancel-btn'){
-                    reject();
-                }
-            })
+            this.dialog.signUpSuccessVisible = true;
         },
         /*时间格式转换*/
         timeConversion(time){
@@ -278,126 +231,7 @@ let app = new Vue({
         autoSave(id){
             setInterval(()=>{ this.saveResume(id) }, 300000)
         },
-        /*注册*/
-        onSignUp(){
-            let pattern = /^([A-Za-z0-9_\-\.])+\@([A-Za-z0-9_\-\.])+\.([A-Za-z]{2,4})$/;
-            let reg = /^[\w]{8,14}$/;
-            let emailError = '',
-                passwdError = '',
-                confirmPasswdError = '';
 
-            if(!this.signUpForm.email){
-                emailError = "邮箱不能为空";
-                this.signUpForm.emailError = emailError;
-                return
-            } else if(!pattern.test(this.signUpForm.email)){
-                emailError = '邮箱格式不正确';
-                this.signUpForm.emailError = emailError;
-                return
-            } else{
-                this.signUpForm.emailError = '';
-            }
-
-            if(!this.signUpForm.passwd){
-                passwdError = '密码不能为空！';
-                this.signUpForm.passwdError = passwdError;
-                return;
-            } else if(!this.signUpForm.passwd.match(reg)){
-                passwdError = '请输入8到14位的密码！';
-                this.signUpForm.passwdError = passwdError;
-                return;
-            } else{
-                this.signUpForm.passwdError = '';
-            }
-
-
-            if(!this.signUpForm.confirmPasswd){
-                confirmPasswdError = '请再次确认密码！';
-                this.signUpForm.confirmPasswdError = confirmPasswdError;
-                return
-            } else if(!(this.signUpForm.passwd === this.signUpForm.confirmPasswd)){
-                confirmPasswdError = '密码不一致！';
-                this.signUpForm.confirmPasswdError = confirmPasswdError;
-                return
-            }else{
-                this.signUpForm.confirmPasswdError = '';
-            }
-
-            // 新建 AVUser 对象实例
-            let user = new AV.User();
-            // 设置用户名
-            user.setUsername(this.signUpForm.email);
-            // 设置密码
-            user.setPassword(this.signUpForm.passwd);
-            // 设置邮箱
-            user.setEmail(this.signUpForm.email);
-            user.signUp().then((user) => {
-                console.log(user);
-                this.signUpSuccess();
-            }, (error) => {
-                switch (error.code) {
-                    case 203:
-                        emailError = '此邮箱已被注册！';
-                        break;
-                    default:
-                        emailError = error.code + '：' + error.error;
-                }
-                this.signUpForm.emailError = emailError;
-            });
-        },
-        /*登录*/
-        onLogin(){
-            let pattern = /^([A-Za-z0-9_\-\.])+\@([A-Za-z0-9_\-\.])+\.([A-Za-z]{2,4})$/;
-            let reg = /^[\w]{8,14}$/;
-            let emailError = '',
-                passwdError = '';
-
-
-            if(!this.logInForm.email){
-                emailError = '邮箱不能为空';
-                this.logInForm.emailError = emailError;
-                return
-            } else if(!pattern.test(this.logInForm.email)){
-                emailError = '邮箱格式不正确';
-                this.logInForm.emailError = emailError;
-                return
-            } else{
-                this.logInForm.emailError = '';
-            }
-
-            if(!this.logInForm.passwd){
-                passwdError = '密码不能为空';
-                this.logInForm.passwdError = passwdError;
-                return
-            }else{
-                this.logInForm.passwdError = ''
-            }
-
-            AV.User.logIn(this.logInForm.email, this.logInForm.passwd).then((res) => {
-                this.currentUser = res.attributes.username;
-                this.closeDialog();
-                window.location.reload();
-            }, (error) => {
-                switch (error.code){
-                    case 210:
-                        passwdError = '邮箱和密码不匹配！';
-                        break;
-                    case 211:
-                        emailError = '邮箱不存在！';
-                        break;
-                    case 216:
-                        emailError = '电子邮件地址未经过验证。';
-                        break;
-                    case 219:
-                        passwdError = '登录失败次数超过限制，请稍候再试！';
-                        break;
-                    default :
-                        passwdError = error.code+'：'+error.error;
-                }
-                this.logInForm.emailError = emailError;
-                this.logInForm.passwdError = passwdError;
-            });
-        },
         /*登出*/
         logout(){
             AV.User.logOut();
@@ -432,9 +266,7 @@ let app = new Vue({
                 this.updatePrompt.visible = false
             }
         },
-        /*编辑模块时打开遮罩层*/
-        editing(name){
-            this.moduleEditing[name] = true;
+        showMask(){
             this.maskVisible = true;
         },
         /*退出编辑模式，关闭遮罩*/
@@ -455,39 +287,11 @@ let app = new Vue({
         closeModuleAside(){
             this.moduleAsideVisible = false
         },
-        addItem(key){
-            let itemData = this.addToItemData[key];
-            this.resume[key].push(itemData);
-        },
-        removeItem(key, index){
-            this.quitEditing();
-            // this.showMessageDialog('确定删除当前子模块吗？','删除后将无法恢复。')
-            if (window.confirm("确认删除吗？删除后不可恢复")) {
-                this.resume[key].splice(index,1)
-            }
-        },
-        moveUp(key,index){
-            let arr = this.resume[key];
-            if(index <= 0){
-                console.log('到头了！')
-            }else{
-                let temp = arr[index];
-                arr.splice(index,1, arr[index - 1]);
-                arr.splice(index - 1, 1, temp);
-            }
-        },
-        moveDown(key,index){
-            let arr = this.resume[key];
-            if(index >= arr.length - 1){
-                console.log('到头了！')
-            }else{
-                let temp = arr[index];
-                arr.splice(index,1, arr[index + 1]);
-                arr.splice(index + 1, 1, temp);
-            }
-        },
         print(){
-            this.printPreview = true
+            this.preview = true;
+            this.quitEditing();
+            console.dir(this.$el);
+            // document.querySelectorAll('[contenteditable]')
             /*let newWindow = window.open("_blank");
             let printHtml = document.getElementById("main").innerHTML;
             let printBox = document.getElementById("print-div");
@@ -495,7 +299,7 @@ let app = new Vue({
             // newWindow.print();
         },
         backEdit(){
-            this.printPreview = false
+            this.preview = false
         },
         clickPrint(){
             this.inPrint = true;
@@ -503,6 +307,10 @@ let app = new Vue({
                 window.print();
                 this.inPrint = false;
             },500)
+        },
+        downloadPdf(){
+
+
         }
     },
     created(){

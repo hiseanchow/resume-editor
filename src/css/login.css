@@ -4,9 +4,6 @@
     left: 0;
     width: 100vw;
     height: 100vh;
-    display: flex;
-    justify-content: center;
-    align-items: center;
     z-index: 80;
 }
 
@@ -17,6 +14,9 @@
     width: 100vw;
     height: 100vh;
     background-color: rgba(0,0,0,0.5);
+    display: flex;
+    justify-content: center;
+    align-items: center;
     z-index: 40;
 }
 
@@ -140,7 +140,16 @@
     display: block;
     text-align: left;
     color: #00c091;
-    line-height: 2em;
+    line-height: 30px;
+    position: absolute;
+    bottom: -30px;
+    left: 0;
+}
+
+.dialog-box .error-message::before{
+    content: "\e61e";
+    color: red;
+    margin-right: 5px;
 }
 
 .dialog-box .dialog-message{

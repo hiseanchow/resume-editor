@@ -8,10 +8,10 @@
     <link rel="stylesheet" href="./css/editarea.css">
     <link rel="stylesheet" href="./css/switch-btn.css">
     <link rel="stylesheet" href="./css/login.css">
-    <link rel="stylesheet" href="http://at.alicdn.com/t/font_808865_weg9mbq0uer.css">
+    <link rel="stylesheet" href="http://at.alicdn.com/t/font_808865_gnpxi9dc3fc.css">
 </head>
 <body>
-<div id="app" :class="{preview: printPreview, inprint: inPrint}">
+<div id="app" :class="{preview: preview, inprint: inPrint}">
     <header id="header">
         <div class="logo">
             <h1>简历编辑器</h1>
@@ -29,7 +29,7 @@
             </div>
         </div>
     </header>
-    <div class="print-header" v-if="!inPrint && printPreview" v-cloak>
+    <div class="print-header" v-if="!inPrint && preview" v-cloak>
         <div @click="backEdit" class="btn back-btn">返回编辑</div>
         <div @click="clickPrint" class="btn print-btn">打印</div>
     </div>
@@ -53,229 +53,29 @@
         </div>
     </aside>
     <!--startprint-->
-    <main id="main">
-        <div class="resume">
-            <!--<div>{{resume}}</div>-->
-            <section class="personal-info" :class="{ active: moduleEditing.personalInfo }" @click="editing('personalInfo')">
-                <div class="left">
-                    <editarea class="name" :value="resume.name" @edit="onEdit('name', $event)"></editarea>
-                    <p class="areer-objective">求职意向：<editarea :value="resume.objective" @edit="onEdit('objective', $event)"></editarea></p>
-                </div>
-                <div class="right">
-                    <ul>
-                        <li>城市：<editarea :value="resume.city" @edit="onEdit('city', $event)"></editarea></li>
-                        <li>学历：<editarea :value="resume.education" @edit="onEdit('education', $event)"></editarea></li>
-                        <li>年龄：<editarea :value="resume.age" @edit="onEdit('age', $event)"></editarea></li>
-                    </ul>
-                    <ul>
-                        <li>电话：<editarea :value="resume.phone" @edit="onEdit('phone', $event)"></editarea></li>
-                        <li>邮箱：<editarea :value="resume.email" @edit="onEdit('email', $event)"></editarea></li>
-                        <li>主页：<editarea :value="resume.site" @edit="onEdit('site', $event)"></editarea></li>
-                    </ul>
-                </div>
-            </section>
-            <section class="introduction" :class="{ active: moduleEditing.introduction }" v-if="module.introduction.visible" @click="editing('introduction')">
-                <h2>个人简介</h2>
-                <div class="content">
-                    <editarea :value="resume.introduction" @edit="onEdit('introduction', $event)"></editarea>
-                </div>
-                <div class="section-btn-group">
-                    <!--<span class="btn add-item-btn"><i class="iconfont icon-shanchu"></i></span>-->
-                </div>
-            </section>
-            <section class="work" :class="{ active: moduleEditing.workexpe }" v-if="module.workexpe.visible" @click="editing('workexpe')">
-                <h2>工作经历</h2>
-                <div class="content">
-                    <div class="expe-item" v-for="(workexpe, key) in resume.workexpe" :key="workexpe.id">
-                        <ul class="expe-title">
-                            <li class="date">
-                                <editarea class="date-input" :value="workexpe.startDate" @edit="onEdit(`workexpe[${key}].startDate`, $event)"></editarea>
-                                ~
-                                <editarea class="date-input" :value="workexpe.endDate" @edit="onEdit(`workexpe[${key}].endDate`, $event)"></editarea>
-                            </li>
-                            <li>
-                                <editarea :value="workexpe.company" @edit="onEdit(`workexpe[${key}].company`, $event)"></editarea>
-                            </li>
-                            <li>
-                                <editarea :value="workexpe.post" @edit="onEdit(`workexpe[${key}].post`, $event)"></editarea>
-                            </li>
-                        </ul>
-                        <p class="description">
-                            <editarea :value="workexpe.description" @edit="onEdit(`workexpe[${key}].description`, $event)"></editarea>
-                        </p>
-                        <div class="item-btn-group">
-                            <span class="btn" @click.stop="moveUp('workexpe', key, $event)"><i class="iconfont icon-arrow-up"></i></span>
-                            <span class="btn" @click.stop="moveDown('workexpe', key, $event)"><i class="iconfont icon-arrow-down"></i></span>
-                            <span class="btn" @click.stop="removeItem('workexpe', key, $event)"><i class="iconfont icon-shanchu"></i></span>
-                        </div>
-                    </div>
-                </div>
-                <div class="section-btn-group">
-                    <span class="btn" @click="addItem('workexpe', $event)"><i class="iconfont icon-jiahao"></i></span>
-                </div>
-            </section>
-            <section class="edu" :class="{active: moduleEditing.eduexpe}" v-if="module.eduexpe.visible" @click="editing('eduexpe')">
-                <h2>教育经历</h2>
-                <div class="content">
-                    <div class="expe-item" v-for="(eduexpe, key) in resume.eduexpe" :key="eduexpe.id">
-                        <ul class="expe-title">
-                            <li class="date">
-                                <editarea class="date-input" :value="eduexpe.startDate" @edit="onEdit(`eduexpe[${key}].startDate`, $event)"></editarea>
-                                ~
-                                <editarea class="date-input" :value="eduexpe.endDate" @edit="onEdit(`eduexpe[${key}].endDate`, $event)"></editarea>
-                            </li>
-                            <li>
-                                <editarea :value="eduexpe.school" @edit="onEdit(`eduexpe[${key}].school`, $event)"></editarea>
-                            </li>
-                            <li>
-                                <editarea :value="eduexpe.discipline" @edit="onEdit(`eduexpe[${key}].discipline`, $event)"></editarea>
-                            </li>
-                        </ul>
-                        <p class="description">
-                            <editarea :value="eduexpe.description" @edit="onEdit(`eduexpe[${key}].description`, $event)"></editarea>
-                        </p>
-                        <div class="item-btn-group">
-                            <span class="btn" @click.stop="moveUp('eduexpe', key, $event)"><i class="iconfont icon-arrow-up"></i></span>
-                            <span class="btn" @click.stop="moveDown('eduexpe', key, $event)"><i class="iconfont icon-arrow-down"></i></span>
-                            <span class="btn" @click.stop="removeItem('eduexpe', key, $event)"><i class="iconfont icon-shanchu"></i></span>
-                        </div>
-                    </div>
-                </div>
-                <div class="section-btn-group">
-                    <span class="btn" @click="addItem('eduexpe', $event)"><i class="iconfont icon-jiahao"></i></span>
-                </div>
-            </section>
-            <section class="skill" :class="{active: moduleEditing.skills}" v-if="module.skills.visible" @click="editing('skills')">
-                <h2>技能描述</h2>
-                <div class="content">
-                    <div class="expe-item skill-item" v-for="(skills, key) in resume.skills" :key="skills.id">
-                        <h3>
-                            <editarea :value="skills.name" @edit="onEdit(`skills[${key}].name`, $event)"></editarea>
-                        </h3>
-                        <p>
-                            <editarea :value="skills.description" @edit="onEdit(`skills[${key}].description`, $event)"></editarea>
-                        </p>
-                        <div class="item-btn-group">
-                            <span class="btn" @click.stop="moveUp('skills', key, $event)"><i class="iconfont icon-arrow-up"></i></span>
-                            <span class="btn" @click.stop="moveDown('skills', key, $event)"><i class="iconfont icon-arrow-down"></i></span>
-                            <span class="btn" @click.stop="removeItem('skills', key, $event)"><i class="iconfont icon-shanchu"></i></span>
-                        </div>
-                    </div>
-                </div>
-                <div class="section-btn-group">
-                    <span class="btn" @click="addItem('skills', $event)"><i class="iconfont icon-jiahao"></i></span>
-                </div>
-            </section>
-            <section class="project" :class="{ active: moduleEditing.projects }" v-if="module.projects.visible" @click="editing('projects')">
-                <h2>项目经历</h2>
-                <div class="content">
-                        <div class="expe-item" v-for="(projects, key) in resume.projects" :key="projects.id">
-                        <ul class="expe-title">
-                            <li class="date">
-                                <editarea class="date-input" :value="projects.startDate" @edit="onEdit(`projects[${key}].startDate`, $event)"></editarea>
-                                ~
-                                <editarea class="date-input" :value="projects.endDate" @edit="onEdit(`projects[${key}].endDate`, $event)"></editarea>
-                            </li>
-                            <li>
-                                <editarea :value="projects.name" @edit="onEdit(`projects[${key}].name`, $event)"></editarea>
-                            </li>
-                            <li>
-                                <editarea :value="projects.role" @edit="onEdit(`projects[${key}].role`, $event)"></editarea>
-                            </li>
-                        </ul>
-                        <p class="description">
-                            <editarea :value="projects.description" @edit="onEdit(`projects[${key}].description`, $event)"></editarea>
-                        </p>
-                        <div class="item-btn-group">
-                            <span class="btn" @click.stop="moveUp('projects', key, $event)"><i class="iconfont icon-arrow-up"></i></span>
-                            <span class="btn" @click.stop="moveDown('projects', key, $event)"><i class="iconfont icon-arrow-down"></i></span>
-                            <span class="btn" @click.stop="removeItem('projects', key, $event)"><i class="iconfont icon-shanchu"></i></span>
-                        </div>
-                    </div>
-                </div>
-                <div class="section-btn-group">
-                    <span class="btn" @click="addItem('projects', $event)"><i class="iconfont icon-jiahao"></i></span>
-                </div>
-            </section>
-        </div>
-    </main>
+    <resume :resume="resume" :moduleediting="moduleEditing" :module="module" :preview="preview"></resume>
     <!--endprint-->
-    <div class="dialog-wrapper" v-if="dialog.maskVisible" v-cloak>
+    <div class="dialog-mask" v-if="dialog.maskVisible" @click="closeDialog()" v-cloak>
         <!--登录对话框-->
-        <div class="dialog-box" v-if="dialog.loginVisible">
-            <span class="close-btn" @click="closeDialog('loginVisible')" title="关闭">&times;</span>
-            <div class="dialog-header">登录账号</div>
-            <form action="" @submit.prevent="onLogin">
-                <ul>
-                    <li>
-                        <span class="error-message" v-if="logInForm.emailError">{{logInForm.emailError}}</span>
-                        <label for="userID"><i class="iconfont icon-zhanghao"></i></label>
-                        <input type="text" name="userID" id="userID" placeholder="邮箱" v-model="logInForm.email">
-                    </li>
-                    <li>
-                        <span class="error-message" v-if="logInForm.passwdError">{{logInForm.passwdError}}</span>
-                        <label for="userID"><i class="iconfont icon-mima"></i></label>
-                        <input type="password" name="userPass" placeholder="密码" v-model="logInForm.passwd">
-                    </li>
-
-                    <li><button>登录</button></li>
-                </ul>
-            </form>
-            <div class="links-area"><a href="#">忘记密码</a><a href="#" @click.prevent="showSignUp">立即注册</a></div>
-        </div>
+        <login-dialog v-if="dialog.loginVisible"></login-dialog>
         <!--注册对话框start-->
-        <div class="dialog-box" v-if="dialog.signUpVisible">
-            <span class="close-btn" @click="closeDialog('signUpVisible')" title="关闭">&times;</span>
-            <div class="dialog-header">注册账号</div>
-            <form action="" @submit.prevent="onSignUp">
-                <ul>
-                    <li>
-                        <span class="error-message" v-if="signUpForm.emailError">{{signUpForm.emailError}}</span>
-                        <label for="userID"><i class="iconfont icon-zhanghao"></i></label>
-                        <input type="text" name="sign-up-userID" placeholder="请输入注册邮箱" v-model="signUpForm.email">
-                    </li>
-                    <li>
-                        <span class="error-message" v-if="signUpForm.passwdError">{{signUpForm.passwdError}}</span>
-                        <label for="userID"><i class="iconfont icon-mima"></i></label>
-                        <input type="password" name="sign-up-userPass" placeholder="请输入密码" v-model="signUpForm.passwd">
-                    </li>
-                    <li>
-                        <span class="error-message" v-if="signUpForm.confirmPasswdError">{{signUpForm.confirmPasswdError}}</span>
-                        <label for="userID"><i class="iconfont icon-querenmima"></i></label>
-                        <input type="password" name="confirm-passwd" placeholder="请再次输入密码" v-model="signUpForm.confirmPasswd">
-                    </li>
-                    <li><button type="submit">注册</button></li>
-                </ul>
-            </form>
-            <div class="links-area">已有账号？<a href="#" @click.prevent="showLogin">立即登录</a></div>
-        </div>
+        <sign-up v-if="dialog.signUpVisible"></sign-up>
         <!--注册成功提示对话框-->
-        <div class="dialog-box" v-if="dialog.signUpSuccess">
-            <span class="close-btn" @click="closeDialog('signUpSuccess')" title="关闭">&times;</span>
-            <div class="dialog-message">注册成功，请检查邮箱并验证，邮箱验证后才可登录。</div>
-            <button @click="showLogin">已验证，去登录</button>
-        </div>
-        <!--确认消息对话框-->
-        <div class="dialog-box message-box" v-if="dialog.messageVisible">
-            <span class="close-btn" @click="closeDialog('messageVisible')" title="关闭">&times;</span>
-            <div class="dialog-header">{{dialogMessage.title}}</div>
-            <div class="message-box-message">{{dialogMessage.message}}</div>
-            <div class="message-box-btn">
-                <button class="btn determine" id="determine-btn">确定</button>
-                <button class="btn cancel" id="cancel-btn">取消</button>
-            </div>
-        </div>
-        <!--遮罩层-->
-        <div class="dialog-mask" @click="closeDialog()" v-cloak></div>
+        <signup-success v-if="dialog.signUpSuccessVisible"></signup-success>
     </div>
     <div class="mask" v-if="maskVisible" @click="quitEditing" v-cloak></div>
 </div>
 <script src="../vendors/js/av-min.js"></script>
 <script src="../vendors/js/vue.min.js"></script>
 <script src="../vendors/laydate/laydate.js"></script>
+<script src="../vendors/js/validator.js"></script>
 <script src="js/init-av.js"></script>
 <script src="js/editarea.js"></script>
 <script src="js/switch-btn.js"></script>
+<script src="js/resume.js"></script>
+<script src="js/login.js"></script>
+<script src="js/signup.js"></script>
+<script src="js/signup-success.js"></script>
 <script src="js/app.js"></script>
 <script src="js/init-laydata.js"></script>
 </body>
