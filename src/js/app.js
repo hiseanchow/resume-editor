@@ -120,41 +120,20 @@ let app = new Vue({
                 visible: true,
             }
         },
-        moduleEditing: {
-            personalInfo: false,
-            introduction: false,
-            workexpe: false,
-            eduexpe: false,
-            skills: false,
-            projects: false,
-        },
         dialog:{
             signUpVisible: false,
             loginVisible: false,
             signUpSuccessVisible: false,
             maskVisible: false,
         },
-        loginReminder: '请注意，当前处于预览状态，数据不会被保存，请登录后制作!',
-        updatePrompt: {
-            visible: false,
-            message: ''
-        },
+        headerPrompt: '请注意，当前处于预览状态，数据不会被保存，请登录后制作!',
         currentUser: '',
         isLogIn: false,
         maskVisible: false,
-        moduleAsideVisible: false,
         preview: false,
         inPrint: false
     },
     methods: {
-        /*模块管理*/
-        onToggle(key, status){
-            this.module[key].visible = !status;
-        },
-        /*弹出对话框*/
-        showDialog(){
-            this.dialog.maskVisible = true;
-        },
         /*关闭对话框*/
         closeDialog(dialogName){
             if(dialogName){
@@ -171,7 +150,6 @@ let app = new Vue({
         },
         /*显示登录对话框*/
         showLogin(){
-            this.showDialog();
             if(this.dialog.signUpVisible){
                 this.dialog.signUpVisible = false;
             }else if(this.dialog.signUpSuccessVisible){
@@ -181,7 +159,6 @@ let app = new Vue({
         },
         /*显示注册对话框*/
         showSignUp(){
-            this.showDialog();
             if(this.dialog.loginVisible){
                 this.dialog.loginVisible = false;
             }
@@ -202,7 +179,6 @@ let app = new Vue({
                 date.getMinutes() + ':' +
                 date.getSeconds();
         },
-        /*点击保存按钮*/
         clickSaveResume(){
             let currentUser = AV.User.current();
             if(currentUser){
@@ -221,7 +197,7 @@ let app = new Vue({
             // 保存到云端
             user.save().then((res)=>{
                 let updateTime = this.timeConversion(res.updatedAt);
-                this.updatePrompt.message = '保存成功，' + updateTime;
+                this.headerPrompt = '保存成功，' + updateTime;
             },(error)=>{
                 console.log(error);
                 console.log('保存失败');
@@ -231,7 +207,6 @@ let app = new Vue({
         autoSave(id){
             setInterval(()=>{ this.saveResume(id) }, 300000)
         },
-
         /*登出*/
         logout(){
             AV.User.logOut();
@@ -245,7 +220,7 @@ let app = new Vue({
                     Object.assign(this.resume, user.attributes.resume);
                     Object.assign(this.module, user.attributes.module);
                     let updateTime = this.timeConversion(user.updatedAt);
-                    this.updatePrompt.message = '上次更新时间：' + updateTime;
+                    this.headerPrompt = '上次更新时间：' + updateTime;
                 }
             }, (error) => {
                 console.log(error);
@@ -255,48 +230,19 @@ let app = new Vue({
         hasLogin(){
             let current = AV.User.current();
             if(current){
-                this.getResume(current.id);
                 this.currentUser = current.attributes.username;
                 this.isLogIn = true;
-                this.updatePrompt.visible = true;
+                this.getResume(current.id);
                 /*自动保存*/
                 /*this.autoSave(current.id);*/
             }else{
                 this.currentUser = '';
-                this.updatePrompt.visible = false
+                this.headerPrompt = '请注意，当前处于预览状态，数据不会被保存，请登录后制作!'
             }
-        },
-        showMask(){
-            this.maskVisible = true;
-        },
-        /*退出编辑模式，关闭遮罩*/
-        quitEditing(){
-            let module = this.moduleEditing;
-            Object.keys(module).forEach((key)=>{
-                if(module[key]){
-                    module[key] = false;
-                }
-            });
-            this.maskVisible = false;
-        },
-        /*打开模块管理*/
-        openModuleAside(){
-            this.moduleAsideVisible = true
-        },
-        /*关闭模块管理*/
-        closeModuleAside(){
-            this.moduleAsideVisible = false
         },
         print(){
             this.preview = true;
-            this.quitEditing();
             console.dir(this.$el);
-            // document.querySelectorAll('[contenteditable]')
-            /*let newWindow = window.open("_blank");
-            let printHtml = document.getElementById("main").innerHTML;
-            let printBox = document.getElementById("print-div");
-            printBox.innerHTML = printHtml;*/
-            // newWindow.print();
         },
         backEdit(){
             this.preview = false

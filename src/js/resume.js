@@ -1,9 +1,22 @@
 Vue.component('resume', {
-    props: ['resume', 'module', 'moduleediting','preview'],
+    props: ['resume', 'module','preview'],
+    data(){
+        return{
+            maskVisible: false,
+            moduleEditing: {
+                personalInfo: false,
+                introduction: false,
+                workexpe: false,
+                eduexpe: false,
+                skills: false,
+                projects: false,
+            },
+        }
+    },
     template: `
 <main id="main">
     <div class="resume">
-        <section class="personal-info" :class="{ active: moduleediting.personalInfo && !preview}" @click="editing('personalInfo')">
+        <section class="personal-info" :class="{ active: moduleEditing.personalInfo && !preview}" @click="editing('personalInfo')">
             <div class="left">
                 <editarea class="name" :value="resume.name" @edit="onEdit('name', $event)"></editarea>
                 <p class="areer-objective">求职意向：<editarea :value="resume.objective" @edit="onEdit('objective', $event)"></editarea></p>
@@ -21,7 +34,7 @@ Vue.component('resume', {
                 </ul>
             </div>
         </section>
-        <section class="introduction" :class="{ active: moduleediting.introduction && !preview }" v-if="module.introduction.visible" @click="editing('introduction')">
+        <section class="introduction" :class="{ active: moduleEditing.introduction && !preview }" v-if="module.introduction.visible" @click="editing('introduction')">
             <h2>个人简介</h2>
             <div class="content">
                 <editarea :value="resume.introduction" @edit="onEdit('introduction', $event)"></editarea>
@@ -30,7 +43,7 @@ Vue.component('resume', {
                 <!--<span class="btn add-item-btn"><i class="iconfont icon-shanchu"></i></span>-->
             </div>
         </section>
-        <section class="work" :class="{active: moduleediting.workexpe && !preview}" v-if="module.workexpe.visible" @click="editing('workexpe')">
+        <section class="work" :class="{active: moduleEditing.workexpe && !preview}" v-if="module.workexpe.visible" @click="editing('workexpe')">
             <h2>工作经历</h2>
             <div class="content">
                 <div class="expe-item" v-for="(workexpe, key) in resume.workexpe" :key="workexpe.id">
@@ -61,7 +74,7 @@ Vue.component('resume', {
                 <span class="btn" @click="addItem('workexpe', $event)"><i class="iconfont icon-jiahao"></i></span>
             </div>
         </section>
-        <section class="edu" :class="{active: moduleediting.eduexpe && !preview}" v-if="module.eduexpe.visible" @click="editing('eduexpe')">
+        <section class="edu" :class="{active: moduleEditing.eduexpe && !preview}" v-if="module.eduexpe.visible" @click="editing('eduexpe')">
             <h2>教育经历</h2>
             <div class="content">
                 <div class="expe-item" v-for="(eduexpe, key) in resume.eduexpe" :key="eduexpe.id">
@@ -92,7 +105,7 @@ Vue.component('resume', {
                 <span class="btn" @click="addItem('eduexpe', $event)"><i class="iconfont icon-jiahao"></i></span>
             </div>
         </section>
-        <section class="skill" :class="{active: moduleediting.skills && !preview}" v-if="module.skills.visible" @click="editing('skills')">
+        <section class="skill" :class="{active: moduleEditing.skills && !preview}" v-if="module.skills.visible" @click="editing('skills')">
             <h2>技能描述</h2>
             <div class="content">
                 <div class="expe-item skill-item" v-for="(skills, key) in resume.skills" :key="skills.id">
@@ -113,7 +126,7 @@ Vue.component('resume', {
                 <span class="btn" @click="addItem('skills', $event)"><i class="iconfont icon-jiahao"></i></span>
             </div>
         </section>
-        <section class="project" :class="{ active: moduleediting.projects && !preview }" v-if="module.projects.visible" @click="editing('projects')">
+        <section class="project" :class="{ active: moduleEditing.projects && !preview }" v-if="module.projects.visible" @click="editing('projects')">
             <h2>项目经历</h2>
             <div class="content">
                     <div class="expe-item" v-for="(projects, key) in resume.projects" :key="projects.id">
@@ -144,6 +157,7 @@ Vue.component('resume', {
                 <span class="btn" @click="addItem('projects', $event)"><i class="iconfont icon-jiahao"></i></span>
             </div>
         </section>
+        <div class="mask" v-if="maskVisible" @click="quitEditing" v-cloak></div>
     </div>
 </main>`,
     methods:{
@@ -163,9 +177,19 @@ Vue.component('resume', {
         },
         /*编辑模块时打开遮罩层*/
         editing(name){
-            this.moduleediting[name] = true;
-            this.$parent.showMask()
-            console.log(!this.preview);
+            this.quitEditing();
+            this.moduleEditing[name] = true;
+            this.maskVisible = true;
+        },
+        /*退出编辑模式，关闭遮罩*/
+        quitEditing(){
+            let module = this.moduleEditing;
+            Object.keys(module).forEach((key)=>{
+                if(module[key]){
+                    module[key] = false;
+                }
+            });
+            this.maskVisible = false;
         },
         addItem(key){
             let itemData = this.addToItemData[key];
@@ -181,7 +205,7 @@ Vue.component('resume', {
         moveUp(key,index){
             let arr = this.resume[key];
             if(index <= 0){
-                console.log('到头了！')
+                console.log('到顶了！')
             }else{
                 let temp = arr[index];
                 arr.splice(index,1, arr[index - 1]);
@@ -191,7 +215,7 @@ Vue.component('resume', {
         moveDown(key,index){
             let arr = this.resume[key];
             if(index >= arr.length - 1){
-                console.log('到头了！')
+                console.log('到底了！')
             }else{
                 let temp = arr[index];
                 arr.splice(index,1, arr[index + 1]);

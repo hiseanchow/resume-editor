@@ -12,67 +12,32 @@
 </head>
 <body>
 <div id="app" :class="{preview: preview, inprint: inPrint}">
-    <header id="header">
-        <div class="logo">
-            <h1>简历编辑器</h1>
-        </div>
-        <div class="prompt login-reminder" v-if="!currentUser" v-cloak>{{loginReminder}}</div>
-        <div class="prompt update-prompt" v-if="updatePrompt.visible" v-cloak>{{updatePrompt.message}}</div>
-        <div class="header-right">
-            <div class="login-signup" v-if="!isLogIn" v-cloak>
-                <a href="" class="login" @click.prevent="showLogin">登录</a>
-                <a href="" class="sign-up" @click.prevent="showSignUp">注册</a>
-            </div>
-            <div class="currentUser" v-if="isLogIn" v-cloak>
-                <span class="username">{{currentUser}}</span>
-                <a href="" class="logout" @click="logout">注销</a>
-            </div>
-        </div>
-    </header>
-    <div class="print-header" v-if="!inPrint && preview" v-cloak>
-        <div @click="backEdit" class="btn back-btn">返回编辑</div>
-        <div @click="clickPrint" class="btn print-btn">打印</div>
-    </div>
-    <aside id="aside">
-        <div class="resume-operation">
-            <ul>
-                <li><a href="" id="sava-resume" @click.prevent="clickSaveResume"><i class="iconfont icon-baocun"></i>保存编辑</a></li>
-                <li><a href="" @click.prevent="print"><i class="iconfont icon-print"></i>打印预览</a></li>
-                <li><a href=""><i class="iconfont icon-zhifeiji"></i>分享简历</a></li>
-                <li><a href="" @click.prevent="openModuleAside"><i class="iconfont icon-mokuaiguanli"></i>模块管理</a></li>
-            </ul>
-        </div>
-        <div class="module-management" :class="{active: moduleAsideVisible}">
-            <ul>
-                <li v-for="(section, key) in module" :key="section.id">
-                    <span>{{section.name}}</span>
-                    <switch-btn :value="section.visible" @toggle="onToggle(key, section.visible, $event)"></switch-btn>
-                </li>
-            </ul>
-            <div class="close-module-btn" @click="closeModuleAside">&lt;&lt; 收起</div>
-        </div>
-    </aside>
-    <!--startprint-->
-    <resume :resume="resume" :moduleediting="moduleEditing" :module="module" :preview="preview"></resume>
-    <!--endprint-->
-    <div class="dialog-mask" v-if="dialog.maskVisible" @click="closeDialog()" v-cloak>
-        <!--登录对话框-->
-        <login-dialog v-if="dialog.loginVisible"></login-dialog>
-        <!--注册对话框start-->
-        <sign-up v-if="dialog.signUpVisible"></sign-up>
-        <!--注册成功提示对话框-->
-        <signup-success v-if="dialog.signUpSuccessVisible"></signup-success>
-    </div>
-    <div class="mask" v-if="maskVisible" @click="quitEditing" v-cloak></div>
+    <header-default :currentuser="currentUser" :prompt="headerPrompt" :islogin="isLogIn"></header-default>
+    <!--预览状态头部-->
+    <preview-header v-if="!inPrint && preview"></preview-header>
+    <!--侧边栏-->
+    <aside-left :resume="resume" :module="module"></aside-left>
+    <!--简历-->
+    <resume :resume="resume" :module="module" :preview="preview"></resume>
+    <!--登录对话框-->
+    <login-dialog v-if="dialog.loginVisible"></login-dialog>
+    <!--注册对话框-->
+    <sign-up v-if="dialog.signUpVisible"></sign-up>
+    <!--注册成功提示对话框-->
+    <signup-success v-if="dialog.signUpSuccessVisible"></signup-success>
 </div>
 <script src="../vendors/js/av-min.js"></script>
 <script src="../vendors/js/vue.min.js"></script>
+<script src="../vendors/js/vue-router.min.js"></script>
 <script src="../vendors/laydate/laydate.js"></script>
 <script src="../vendors/js/validator.js"></script>
 <script src="js/init-av.js"></script>
 <script src="js/editarea.js"></script>
 <script src="js/switch-btn.js"></script>
+<script src="js/header.js"></script>
+<script src="js/preview-header.js"></script>
 <script src="js/resume.js"></script>
+<script src="js/aside.js"></script>
 <script src="js/login.js"></script>
 <script src="js/signup.js"></script>
 <script src="js/signup-success.js"></script>

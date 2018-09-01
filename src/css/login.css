@@ -21,8 +21,8 @@
 }
 
 .dialog-box{
-    width: 400px;
-    padding: 50px;
+    width: 450px;
+    padding: 50px 75px;
     background-color: #fff;
     box-shadow: 0 0 30px rgba(0,0,0,0.3);
     overflow: hidden;

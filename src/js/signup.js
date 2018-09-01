@@ -1,34 +1,36 @@
 Vue.component('sign-up',{
     template: `
-<div class="dialog-box" @click.stop="" v-cloak>
-    <span class="close-btn" @click="$parent.closeDialog('signUpVisible')" title="关闭">&times;</span>
-    <div class="dialog-header">注册账号</div>
-    <form name="sign-up-form" action="" @submit.prevent="onSignUp">
-        <ul>
-            <li>
-                <span class="error-message iconfont icon-cuowu" v-if="signUpForm.nameError">{{signUpForm.nameError}}</span>
-                <label for="sign-up-name"><i class="iconfont icon-zhanghao"></i></label>
-                <input type="text" id="sign-up-name" name="name" placeholder="请输入用户名" v-model="signUpForm.name">
-            </li>
-            <li>
-                <span class="error-message iconfont icon-cuowu" v-if="signUpForm.emailError">{{signUpForm.emailError}}</span>
-                <label for="sign-up-email"><i class="iconfont icon-zhanghao"></i></label>
-                <input type="text" id="sign-up-email" name="email" placeholder="请输入注册邮箱" v-model="signUpForm.email" @blur="validator('required|email', $event)">
-            </li>
-            <li>
-                <span class="error-message iconfont" v-if="signUpForm.passwdError">{{signUpForm.passwdError}}</span>
-                <label for="sign-up-userPass"><i class="iconfont icon-mima"></i></label>
-                <input type="password" name="password" id="sign-up-userPass" placeholder="请输入6到24位的密码" v-model="signUpForm.passwd">
-            </li>
-            <li>
-                <span class="error-message iconfont" v-if="signUpForm.confirmPasswdError">{{signUpForm.confirmPasswdError}}</span>
-                <label for="signup-passwd-confirm"><i class="iconfont icon-querenmima"></i></label>
-                <input type="password" name="passwdConfirm" id="signup-passwd-confirm" placeholder="请再次确认密码" v-model="signUpForm.confirmPasswd">
-            </li>
-            <li><button type="submit">注册</button></li>
-        </ul>
-    </form>
-    <div class="links-area">已有账号？<a href="#" @click.prevent="$parent.showLogin">立即登录</a></div>
+<div class="dialog-mask" @click="$parent.closeDialog('signUpVisible')">
+    <div class="dialog-box" @click.stop="">
+        <span class="close-btn" @click="$parent.closeDialog('signUpVisible')" title="关闭">&times;</span>
+        <div class="dialog-header">注册账号</div>
+        <form name="sign-up-form" action="" @submit.prevent="onSignUp">
+            <ul>
+                <li>
+                    <span class="error-message iconfont icon-cuowu" v-if="signUpForm.nameError">{{signUpForm.nameError}}</span>
+                    <label for="sign-up-name"><i class="iconfont icon-zhanghao"></i></label>
+                    <input type="text" id="sign-up-name" name="name" placeholder="请输入用户名" v-model="signUpForm.name">
+                </li>
+                <li>
+                    <span class="error-message iconfont icon-cuowu" v-if="signUpForm.emailError">{{signUpForm.emailError}}</span>
+                    <label for="sign-up-email"><i class="iconfont icon-zhanghao"></i></label>
+                    <input type="text" id="sign-up-email" name="email" placeholder="请输入注册邮箱" v-model="signUpForm.email" @blur="validator('required|email', $event)">
+                </li>
+                <li>
+                    <span class="error-message iconfont" v-if="signUpForm.passwdError">{{signUpForm.passwdError}}</span>
+                    <label for="sign-up-userPass"><i class="iconfont icon-mima"></i></label>
+                    <input type="password" name="password" id="sign-up-userPass" placeholder="请输入6到24位的密码" v-model="signUpForm.passwd">
+                </li>
+                <li>
+                    <span class="error-message iconfont" v-if="signUpForm.confirmPasswdError">{{signUpForm.confirmPasswdError}}</span>
+                    <label for="signup-passwd-confirm"><i class="iconfont icon-querenmima"></i></label>
+                    <input type="password" name="passwdConfirm" id="signup-passwd-confirm" placeholder="请再次确认密码" v-model="signUpForm.confirmPasswd">
+                </li>
+                <li><button type="submit">注册</button></li>
+            </ul>
+        </form>
+        <div class="links-area">已有账号？<a href="#" @click.prevent="$parent.showLogin">立即登录</a></div>
+    </div>
 </div>`,
     data(){
         return {

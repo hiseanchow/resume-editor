@@ -1,25 +1,27 @@
 Vue.component('login-dialog',{
    template: `
-<div class="dialog-box" @click.stop="" v-cloak>
-    <span class="close-btn" @click="$parent.closeDialog('loginVisible')" title="关闭">&times;</span>
-    <div class="dialog-header">登录账号</div>
-    <form action="" @submit.prevent="onLogin">
-        <ul>
-            <li>
-                <span class="error-message iconfont" v-if="logInForm.emailError">{{logInForm.emailError}}</span>
-                <label for="userID"><i class="iconfont icon-zhanghao"></i></label>
-                <input type="text" name="userID" id="userID" placeholder="邮箱" v-model="logInForm.email">
-            </li>
-            <li>
-                <span class="error-message iconfont" v-if="logInForm.passwdError">{{logInForm.passwdError}}</span>
-                <label for="userID"><i class="iconfont icon-mima"></i></label>
-                <input type="password" name="userPass" placeholder="密码" v-model="logInForm.passwd">
-            </li>
-
-            <li><button>登录</button></li>
-        </ul>
-    </form>
-    <div class="links-area"><a href="#">忘记密码</a><a href="#" @click.prevent="$parent.showSignUp">立即注册</a></div>
+<div class="dialog-mask" @click="$parent.closeDialog('loginVisible')">
+    <div class="dialog-box" @click.stop="">
+        <span class="close-btn" @click="$parent.closeDialog('loginVisible')" title="关闭">&times;</span>
+        <div class="dialog-header">登录账号</div>
+        <form action="" @submit.prevent="onLogin">
+            <ul>
+                <li>
+                    <span class="error-message iconfont" v-if="logInForm.emailError">{{logInForm.emailError}}</span>
+                    <label for="userID"><i class="iconfont icon-zhanghao"></i></label>
+                    <input type="text" name="userID" id="userID" placeholder="邮箱" v-model="logInForm.email">
+                </li>
+                <li>
+                    <span class="error-message iconfont" v-if="logInForm.passwdError">{{logInForm.passwdError}}</span>
+                    <label for="userID"><i class="iconfont icon-mima"></i></label>
+                    <input type="password" name="userPass" placeholder="密码" v-model="logInForm.passwd">
+                </li>
+    
+                <li><button>登录</button></li>
+            </ul>
+        </form>
+        <div class="links-area"><a href="#">忘记密码</a><a href="#" @click.prevent="$parent.showSignUp">立即注册</a></div>
+    </div>
 </div>`,
     data(){
        return {

@@ -12,8 +12,8 @@ div[v-cloak]{
     display: none;
 }
 
-p,h1,h2,h3,h4,h5,h6{
-    max-height: 999999px;
+p,h1,h2,h3,h4,h5,h6,div{
+    max-height: 9999999px;
 }
 
 #app{
@@ -23,8 +23,8 @@ p,h1,h2,h3,h4,h5,h6{
     transition: 0.3s;
 }
 
-#header,
-.print-header{
+.header,
+.preview-header{
     position: fixed;
     display: flex;
     justify-content: space-between;
@@ -41,12 +41,12 @@ p,h1,h2,h3,h4,h5,h6{
     z-index: 20;
 }
 
-.print-header{
+.preview-header{
     padding: 0;
 }
 
-.print-header .back-btn,
-.print-header .print-btn{
+.preview-header .back-btn,
+.preview-header .print-btn{
     height: 100%;
     padding: 0 50px;
     background-color: #00c091;
@@ -55,22 +55,22 @@ p,h1,h2,h3,h4,h5,h6{
     cursor: pointer;
 }
 
-#header .logo{
+.header .logo{
     color: #00c091;
     font-size: 20px;
     font-weight: 700;
 }
 
-#header .header-right{
+.header .header-right{
     position: relative;
 }
 
-#header .header-right > div{
+.header .header-right > div{
     display: flex;
     justify-content: flex-end;
 }
 
-#header .header-right .login-signup{
+.header .header-right .login-signup{
     position: absolute;
     min-width: 100%;
     top: 50%;
@@ -79,11 +79,11 @@ p,h1,h2,h3,h4,h5,h6{
     background-color: #fff;
 }
 
-#header .header-right .login{
+.header .header-right .login{
     margin-right: 20px;
 }
 
-#header .header-right a{
+.header .header-right a{
     color: #00c091;
     transition: .3s;
     height: 30px;
@@ -93,21 +93,21 @@ p,h1,h2,h3,h4,h5,h6{
     white-space:nowrap;
 }
 
-#header .header-right .sign-up{
+.header .header-right .sign-up{
     color: #fff;
     border-radius: 5px;
     background-color: #00c091;
 }
 
-#header .header-right .sign-up:hover{
+.header .header-right .sign-up:hover{
     background-color: #00C06D;
 }
 
-#header .header-right .login:hover{
+.header .header-right .login:hover{
     color: #00C06D;
 }
 
-#header .prompt{
+.header .prompt{
     color: #13CE66;
     font-size: 14px;
 }
@@ -361,18 +361,18 @@ p,h1,h2,h3,h4,h5,h6{
     line-height: 1.5em;
 }
 
-.currentUser .username{
+.current-user .username{
     color: #00c091;
     font-weight: bold;
 }
 
-#header .currentUser .logout{
+.header .current-user .logout{
     line-height: inherit;
     font-size: 14px;
     color: #999;
 }
 
-#header .currentUser .logout:hover{
+.header .current-user .logout:hover{
     color: #00c091;
 }
 
@@ -503,11 +503,15 @@ p,h1,h2,h3,h4,h5,h6{
 .preview > aside,
 .preview .dialog-wrapper,
 .preview .mask,
-#app.inprint .print-header{
+#app.inprint .preview-header{
     visibility: hidden;
 }
 #app.preview{
     background-color: #E7F2FF;
+}
+
+.preview #main{
+    transform: translateX(0);
 }
 
 .preview #main .section-btn-group,
