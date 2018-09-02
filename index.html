@@ -1,0 +1,30 @@
+<!doctype html>
+<html lang="zh-Hans">
+<head>
+    <meta charset="UTF-8">
+    <title>简历编辑器</title>
+    <link rel="stylesheet" href="dist/main.css">
+    <link rel="stylesheet" href="http://at.alicdn.com/t/font_808865_gnpxi9dc3fc.css">
+</head>
+<body>
+<div id="app" :class="{preview: preview, inprint: inPrint}">
+    <header-default :currentuser="currentUser" :prompt="headerPrompt" :islogin="isLogIn"></header-default>
+    <!--预览状态头部-->
+    <preview-header v-if="!inPrint && preview"></preview-header>
+    <!--侧边栏-->
+    <aside-left :resume="resume" :module="module"></aside-left>
+    <!--简历-->
+    <resume :resume="resume" :module="module" :preview="preview"></resume>
+    <!--登录对话框-->
+    <login-dialog v-if="dialog.loginVisible"></login-dialog>
+    <!--注册对话框-->
+    <sign-up v-if="dialog.signUpVisible"></sign-up>
+    <!--注册成功提示对话框-->
+    <signup-success v-if="dialog.signUpSuccessVisible"></signup-success>
+</div>
+<script src="vendors/laydate/laydate.js"></script>
+<script src="vendors/js/av-min.js"></script>
+<script src="vendors/js/vue.min.js"></script>
+<script src="dist/bundle.js"></script>
+</body>
+</html>
